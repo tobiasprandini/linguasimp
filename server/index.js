@@ -654,23 +654,20 @@ app.get("/admin/runtime-data", (req, res) =>
 			)
 			.order("id");
 
-		if (isMissingLessonIdColumn(sentencesError) || isMissingSpeechSpeedColumn(sentencesError)) {
+		if (isMissingSpeechSpeedColumn(sentencesError)) {
+			throw createMissingSpeechSpeedColumnError();
+		}
+
+		if (isMissingLessonIdColumn(sentencesError)) {
 			const fallbackSentencesResponse = await supabase
 				.from("sentences")
 				.select(
-					isMissingLessonIdColumn(sentencesError)
-						? "id, text, translation, level, difficulty_score, naturalness_score, topic_tags, grammar_tags, context_tags, audio_path, status, source, language_code"
-						: "id, text, translation, level, difficulty_score, naturalness_score, topic_tags, grammar_tags, context_tags, audio_path, status, source, language_code, lesson_id",
+					"id, text, translation, level, difficulty_score, naturalness_score, topic_tags, grammar_tags, context_tags, audio_path, status, source, language_code, speech_speed",
 				)
 				.order("id");
 
 			sentences = (fallbackSentencesResponse.data ?? [])
-				.map(hydrateSentenceLesson)
-				.map((sentence) => ({
-					...sentence,
-					speech_speed:
-						sentence.speech_speed ?? DEFAULT_SENTENCE_SPEECH_SPEED,
-				}));
+				.map(hydrateSentenceLesson);
 			sentencesError = fallbackSentencesResponse.error;
 		} else {
 			sentences = (sentences ?? []).map(hydrateSentenceLesson);

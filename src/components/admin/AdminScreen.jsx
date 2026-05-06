@@ -569,6 +569,16 @@ function AdminScreen() {
 		setMessage("");
 
 		try {
+			const previousSpeechSpeed = Number(
+				selectedSentenceRecord?.speech_speed ?? DEFAULT_SENTENCE_SPEECH_SPEED,
+			);
+			const nextSpeechSpeed = Number(
+				sentenceForm.speech_speed ?? DEFAULT_SENTENCE_SPEECH_SPEED,
+			);
+			const shouldRegenerateAudio =
+				!sentenceForm.isNew &&
+				Boolean(selectedSentenceRecord?.audio_path) &&
+				Math.abs(previousSpeechSpeed - nextSpeechSpeed) > 0.001;
 			const payload = {
 				...sentenceForm,
 				topic_tags: parseArrayInput(sentenceForm.topic_tags),
@@ -580,11 +590,20 @@ function AdminScreen() {
 			const response = sentenceForm.isNew
 				? await createSentence(payload)
 				: await updateSentence(targetExternalId, payload);
+			if (shouldRegenerateAudio) {
+				await regenerateSentenceAudio(response?.data?.id ?? targetExternalId, {
+					speech_speed: nextSpeechSpeed,
+				});
+			}
 			await loadAdminData();
 			if (response?.data?.id) {
 				setSelectedSentenceId(response.data.id);
 			}
-			setMessage("Frase atualizada.");
+			setMessage(
+				shouldRegenerateAudio
+					? "Frase atualizada e audio regenerado."
+					: "Frase atualizada.",
+			);
 		} catch (error) {
 			setMessage(error.message);
 		} finally {
