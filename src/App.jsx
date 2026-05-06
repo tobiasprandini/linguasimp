@@ -7,7 +7,6 @@ import FlashcardsScreen from "./components/FlashcardsScreen";
 import LandingScreen from "./components/LandingScreen";
 import LanguageMenu from "./components/LanguageMenu";
 import LessonCompleteScreen from "./components/LessonCompleteScreen";
-import OnboardingScreen from "./components/OnboardingScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import ProgressExamplesScreen from "./components/ProgressExamplesScreen";
 import WalletDemoScreen from "./components/WalletDemoScreen";
@@ -201,7 +200,7 @@ function getViewModeFromHash() {
 	}
 
 	if (route === "onboarding" || pathRoute === "onboarding") {
-		return "onboarding";
+		return "signup";
 	}
 
 	if (route === "study" || pathRoute === "study") {
@@ -1396,29 +1395,6 @@ function App() {
 		}
 
 		return <LandingScreen />;
-	}
-
-	if (viewMode === "onboarding") {
-		if (authUser) {
-			return (
-				<DashboardScreen
-					user={authUser}
-					learningLanguage={selectedLanguage}
-					sentenceCount={lessonSentences.length}
-					knownCount={knownProfileBlocks.length}
-					learningCount={learningProfileBlocks.length}
-					newBlockCount={newProfileBlockCount}
-					flashcardCount={flashcardDeck.length}
-					dueFlashcardCount={dueFlashcardCount}
-					weeklyActivity={learningActivity}
-					knownBlocks={knownProfileBlocks}
-					onSelectLanguage={handleDashboardSelectLanguage}
-					onSignOut={handleSignOut}
-				/>
-			);
-		}
-
-		return <OnboardingScreen />;
 	}
 
 	if (

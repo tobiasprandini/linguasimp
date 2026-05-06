@@ -46,14 +46,14 @@ function LandingScreen() {
 							Planos
 						</a>
 						<a
-							href="#onboarding"
+							href="#login"
 							aria-label="Entrar na sua conta"
 							className="hidden text-lg font-normal text-slate-300 transition hover:text-white sm:inline-flex"
 						>
 							Entrar
 						</a>
 						<a
-							href="#login"
+							href="#signup"
 							className="ml-2 inline-flex h-14 items-center justify-center gap-4 rounded-[0.9rem] bg-[#6e46e8] px-7 text-lg font-normal text-white shadow-[0_20px_55px_rgba(110,70,232,0.35)] transition hover:-translate-y-0.5 hover:bg-[#8b6cf4]"
 						>
 							Começar grátis
@@ -76,14 +76,14 @@ function LandingScreen() {
 						</p>
 						<div className="mt-9 flex flex-wrap items-center gap-5">
 							<a
-								href="#onboarding"
+								href="#signup"
 								className="inline-flex h-16 w-full max-w-[18rem] items-center justify-center gap-4 rounded-[1.1rem] bg-[#6e46e8] px-8 text-xl font-normal text-white shadow-[0_22px_55px_rgba(110,70,232,0.34)] transition hover:-translate-y-0.5 hover:bg-[#8b6cf4] sm:w-[18rem]"
 							>
 								Começar agora
 								<ArrowRight className="size-6 stroke-[2.1]" />
 							</a>
 							<a
-								href="#onboarding"
+								href="#signup"
 								className="inline-flex h-16 w-full max-w-[18rem] items-center justify-center gap-4 rounded-[1.1rem] border border-white/15 bg-black/25 px-8 text-xl font-normal text-slate-200 transition hover:border-[#8b6cf4]/55 hover:bg-white/5 sm:w-[18rem]"
 							>
 								<span className="grid size-10 place-items-center rounded-full border border-[#8b6cf4]/60 text-[#8b6cf4]">
