@@ -117,13 +117,14 @@ function isMissingSpeechSpeedColumn(error) {
 	return error?.message?.includes("speech_speed") || error?.code === "42703";
 }
 
-function omitLessonId(payload) {
-	const { lesson_id: _lessonId, ...rest } = payload;
-	return rest;
+function createMissingSpeechSpeedColumnError() {
+	return new Error(
+		"A coluna speech_speed ainda nao esta disponivel no Supabase. Rode a migration de speech_speed e recarregue o schema cache com: notify pgrst, 'reload schema';",
+	);
 }
 
-function omitSpeechSpeed(payload) {
-	const { speech_speed: _speechSpeed, ...rest } = payload;
+function omitLessonId(payload) {
+	const { lesson_id: _lessonId, ...rest } = payload;
 	return rest;
 }
 
@@ -132,10 +133,6 @@ function omitMissingSentenceColumns(payload, error) {
 
 	if (isMissingLessonIdColumn(error)) {
 		nextPayload = omitLessonId(nextPayload);
-	}
-
-	if (isMissingSpeechSpeedColumn(error)) {
-		nextPayload = omitSpeechSpeed(nextPayload);
 	}
 
 	return nextPayload;
@@ -268,19 +265,7 @@ async function regenerateSentenceAudioByExternalId(externalId, options = {}) {
 		.single();
 
 	if (isMissingSpeechSpeedColumn(fetchError)) {
-		const fallbackResponse = await supabase
-			.from("sentences")
-			.select("id, text, language_code, audio_path")
-			.eq("id", externalId)
-			.single();
-
-		sentence = fallbackResponse.data
-			? {
-					...fallbackResponse.data,
-					speech_speed: DEFAULT_SENTENCE_SPEECH_SPEED,
-				}
-			: null;
-		fetchError = fallbackResponse.error;
+		throw createMissingSpeechSpeedColumnError();
 	}
 
 	if (fetchError || !sentence?.text) {
@@ -311,22 +296,7 @@ async function regenerateSentenceAudioByExternalId(externalId, options = {}) {
 		.single();
 
 	if (isMissingSpeechSpeedColumn(updateError)) {
-		const fallbackUpdateResponse = await supabase
-			.from("sentences")
-			.update({
-				audio_path: filePath,
-			})
-			.eq("id", externalId)
-			.select()
-			.single();
-
-		data = fallbackUpdateResponse.data
-			? {
-					...fallbackUpdateResponse.data,
-					speech_speed: speechSpeed,
-				}
-			: null;
-		updateError = fallbackUpdateResponse.error;
+		throw createMissingSpeechSpeedColumnError();
 	}
 
 	if (updateError) {
@@ -797,7 +767,11 @@ app.post("/admin/sentences", (req, res) =>
 			.select()
 			.single();
 
-		if (isMissingLessonIdColumn(error) || isMissingSpeechSpeedColumn(error)) {
+		if (isMissingSpeechSpeedColumn(error)) {
+			throw createMissingSpeechSpeedColumnError();
+		}
+
+		if (isMissingLessonIdColumn(error)) {
 			const fallbackPayload = omitMissingSentenceColumns(payload, error);
 			const fallbackResponse = await supabase
 				.from("sentences")
@@ -925,7 +899,11 @@ app.patch("/admin/sentences/:externalId", (req, res) =>
 				.select()
 				.single();
 
-			if (isMissingLessonIdColumn(insertError) || isMissingSpeechSpeedColumn(insertError)) {
+			if (isMissingSpeechSpeedColumn(insertError)) {
+				throw createMissingSpeechSpeedColumnError();
+			}
+
+			if (isMissingLessonIdColumn(insertError)) {
 				const fallbackInsertResponse = await supabase
 					.from("sentences")
 					.insert([
@@ -1003,7 +981,11 @@ app.patch("/admin/sentences/:externalId", (req, res) =>
 			.select()
 			.single();
 
-		if (isMissingLessonIdColumn(error) || isMissingSpeechSpeedColumn(error)) {
+		if (isMissingSpeechSpeedColumn(error)) {
+			throw createMissingSpeechSpeedColumnError();
+		}
+
+		if (isMissingLessonIdColumn(error)) {
 			const fallbackResponse = await supabase
 				.from("sentences")
 				.update(omitMissingSentenceColumns(payload, error))
