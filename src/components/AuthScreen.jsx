@@ -1,6 +1,5 @@
 import { createElement, useState } from "react";
 import { ArrowRight, Check, Lock, Mail, UserRound } from "lucide-react";
-import { createConfirmedUser } from "../lib/authApi";
 import { supabase } from "../lib/supabase";
 
 const AUTH_REDIRECT_STORAGE_KEY = "linguasimp-auth-redirect";
@@ -38,11 +37,32 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 
 		try {
 			if (isSignup) {
-				await createConfirmedUser({
-					name,
+				const signupResponse = await supabase.auth.signUp({
 					email,
 					password,
+					options: {
+						data: {
+							name,
+							full_name: name,
+						},
+						emailRedirectTo:
+							typeof window === "undefined"
+								? undefined
+								: window.location.origin,
+					},
 				});
+
+				if (signupResponse.error) {
+					throw signupResponse.error;
+				}
+
+				if (!signupResponse.data.session) {
+					setMessage("Conta criada. Confira seu email para confirmar o cadastro.");
+					return;
+				}
+
+				onAuthenticated?.(signupResponse.data.user);
+				return;
 			}
 
 			const authResponse = await supabase.auth.signInWithPassword({
