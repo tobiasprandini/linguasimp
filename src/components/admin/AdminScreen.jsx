@@ -1184,6 +1184,14 @@ function AdminScreen() {
 
 						<div className="max-h-[70vh] space-y-2 overflow-y-auto pr-1">
 							{isLoading ? <p className="text-white/60">Carregando...</p> : null}
+							{!isLoading && visibleItems.length === 0 ? (
+								<div className="rounded-2xl border border-dashed border-white/10 bg-black/10 px-4 py-5 text-sm leading-relaxed text-white/45">
+									{runtimeData.sentences.length === 0 &&
+									runtimeData.blocks.length === 0
+										? "Nenhum dado encontrado no Supabase."
+										: "Nenhum item encontrado com os filtros atuais."}
+								</div>
+							) : null}
 
 							{view === "sentences"
 								? paginatedSentenceGroups.map((group) => (
