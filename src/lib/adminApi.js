@@ -1,11 +1,5 @@
-import { extractContextualTipFromTags } from "./contextualTipTags";
-import { supabase } from "./supabase";
-
-const DEFAULT_LESSON_ID = "lesson_1";
-const LESSON_CONTEXT_TAG_PREFIX = "lesson:";
-const CONTEXTUAL_TIP_TAG_PREFIX = "contextual_tip:";
 const ADMIN_BACKEND_ERROR =
-	"Backend do admin nao configurado. Defina VITE_API_BASE_URL na Vercel para salvar alteracoes e gerar audio.";
+	"Backend do admin nao configurado. Defina VITE_API_BASE_URL na Vercel.";
 
 function getApiBaseUrl() {
 	const explicitBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -48,103 +42,7 @@ async function request(path, options = {}) {
 	return data;
 }
 
-function normalizeLessonId(value) {
-	const rawValue = String(value ?? "").trim().toLowerCase();
-	const numericMatch = rawValue.match(/\b([1-9][0-9]*)\b/);
-
-	if (rawValue.startsWith("lesson_")) {
-		return rawValue.replace(/[^a-z0-9_]/g, "") || DEFAULT_LESSON_ID;
-	}
-
-	if (numericMatch) {
-		return `lesson_${numericMatch[1]}`;
-	}
-
-	return DEFAULT_LESSON_ID;
-}
-
-function getLessonIdFromContextTags(contextTags = []) {
-	const lessonTag = (contextTags ?? []).find((tag) =>
-		String(tag).startsWith(LESSON_CONTEXT_TAG_PREFIX),
-	);
-
-	return lessonTag
-		? normalizeLessonId(String(lessonTag).slice(LESSON_CONTEXT_TAG_PREFIX.length))
-		: DEFAULT_LESSON_ID;
-}
-
-function hydrateSentenceLesson(sentence) {
-	if (!sentence) {
-		return sentence;
-	}
-
-	return {
-		...sentence,
-		lesson_id:
-			sentence.lesson_id ?? getLessonIdFromContextTags(sentence.context_tags ?? []),
-	};
-}
-
-function omitContextualTipTags(tags = []) {
-	return (Array.isArray(tags) ? tags : []).filter(
-		(tag) => !String(tag).startsWith(CONTEXTUAL_TIP_TAG_PREFIX),
-	);
-}
-
-async function fetchAdminRuntimeDataFromSupabase() {
-	const [
-		sentencesResponse,
-		blocksResponse,
-		sentenceBlocksResponse,
-	] = await Promise.all([
-		supabase
-			.from("sentences")
-			.select(
-				"id, text, translation, level, difficulty_score, naturalness_score, topic_tags, grammar_tags, context_tags, audio_path, status, source, language_code, lesson_id, speech_speed",
-			)
-			.order("id"),
-		supabase
-			.from("blocks")
-			.select(
-				"id, canonical_text, core_meaning, pronunciation_hint, contextual_tip, block_type, tags, language_code, audio_path",
-			)
-			.order("id"),
-		supabase
-			.from("sentence_blocks")
-			.select("id, sentence_id, block_id, order_index, surface, contextual_gloss")
-			.order("sentence_id")
-			.order("order_index"),
-	]);
-
-	const firstError =
-		sentencesResponse.error ??
-		blocksResponse.error ??
-		sentenceBlocksResponse.error;
-
-	if (firstError) {
-		throw firstError;
-	}
-
-	return {
-		ok: true,
-		data: {
-			sentences: (sentencesResponse.data ?? []).map(hydrateSentenceLesson),
-			blocks: (blocksResponse.data ?? []).map((block) => ({
-				...block,
-				contextual_tip:
-					block.contextual_tip ?? extractContextualTipFromTags(block.tags),
-				tags: omitContextualTipTags(block.tags),
-			})),
-			sentenceBlocks: sentenceBlocksResponse.data ?? [],
-		},
-	};
-}
-
 export function fetchAdminRuntimeData() {
-	if (!getApiBaseUrl()) {
-		return fetchAdminRuntimeDataFromSupabase();
-	}
-
 	return request("/admin/runtime-data");
 }
 
