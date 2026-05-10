@@ -116,7 +116,7 @@ function SentenceScreen({
 						onSignOut={onSignOut}
 						showLogo={false}
 						centerSlot={
-							<div className="mx-auto w-full max-w-[36rem]">
+							<div className="mx-auto w-full max-w-[32rem]">
 								<div className="mb-3 flex items-center justify-between text-[0.68rem] font-normal text-slate-500 sm:text-sm">
 									<MotionDiv
 										key={`${currentSentenceIndex}-${totalSentences}`}
