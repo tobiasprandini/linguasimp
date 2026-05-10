@@ -153,7 +153,7 @@ function SentenceScreen({
 					ref={mainContentRef}
 					className="flex min-h-0 flex-1 flex-col"
 				>
-					<div className="flex min-h-0 flex-1 flex-col items-center justify-end pb-10 sm:pb-12">
+					<div className="flex min-h-0 flex-1 flex-col items-center justify-end pb-20 sm:pb-24">
 						{topSlot ? <div className="mb-6 w-full max-w-3xl">{topSlot}</div> : null}
 
 						<div className="mx-auto flex w-full flex-1 flex-col items-center justify-center text-center">
