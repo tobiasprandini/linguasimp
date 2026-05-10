@@ -106,7 +106,7 @@ function SentenceScreen({
 
 	return (
 		<div className="min-h-screen bg-[#08090d] text-white">
-			<header className="px-4 pb-4 pt-3 sm:px-6 sm:pb-5 sm:pt-4 lg:px-8 lg:pb-5 lg:pt-5">
+			<header className="px-4 py-3 sm:px-6 sm:py-4 lg:px-8 lg:py-5">
 				<div className="w-full">
 					<AppHeader
 						user={user}
@@ -115,34 +115,36 @@ function SentenceScreen({
 						onSelectLanguage={onSelectLanguage}
 						onSignOut={onSignOut}
 						showLogo={false}
+						centerSlot={
+							<div className="mx-auto w-full max-w-md">
+								<div className="mb-3 flex items-center justify-between text-[0.68rem] font-normal text-slate-500 sm:text-sm">
+									<MotionDiv
+										key={`${currentSentenceIndex}-${totalSentences}`}
+										initial={{ opacity: 0, y: 5 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={progressTextTransition}
+										className="tabular-nums"
+									>
+										{currentSentenceIndex} / {totalSentences} blocos
+									</MotionDiv>
+									<MotionDiv
+										key={Math.round(progressValue)}
+										initial={{ opacity: 0, y: 5 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={progressTextTransition}
+										className="tabular-nums"
+									>
+										{Math.round(progressValue)}% dominado
+									</MotionDiv>
+								</div>
+								<Progress
+									value={progressValue}
+									secondaryValue={reviewedProgressValue}
+									className="h-2 bg-[#20232d]"
+								/>
+							</div>
+						}
 					/>
-					<div className="mx-auto mt-1 w-full max-w-md lg:-mt-1">
-						<div className="mb-3 flex items-center justify-between text-[0.68rem] font-normal text-slate-500 sm:text-sm">
-							<MotionDiv
-								key={`${currentSentenceIndex}-${totalSentences}`}
-								initial={{ opacity: 0, y: 5 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={progressTextTransition}
-								className="tabular-nums"
-							>
-								{currentSentenceIndex} / {totalSentences} blocos
-							</MotionDiv>
-							<MotionDiv
-								key={Math.round(progressValue)}
-								initial={{ opacity: 0, y: 5 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={progressTextTransition}
-								className="tabular-nums"
-							>
-								{Math.round(progressValue)}% dominado
-							</MotionDiv>
-						</div>
-						<Progress
-							value={progressValue}
-							secondaryValue={reviewedProgressValue}
-							className="h-2 bg-[#20232d]"
-						/>
-					</div>
 				</div>
 			</header>
 

@@ -318,6 +318,7 @@ function AppHeader({
 	onSelectLanguage,
 	onSignOut,
 	showLogo = true,
+	centerSlot = null,
 }) {
 	const firstName = getFirstName(user);
 
@@ -341,7 +342,9 @@ function AppHeader({
 				</NavLink>
 			</nav>
 
-			{showLogo ? (
+			{centerSlot ? (
+				<div className="w-full justify-self-center">{centerSlot}</div>
+			) : showLogo ? (
 				<a
 					href="#dashboard"
 					className="justify-self-center"
