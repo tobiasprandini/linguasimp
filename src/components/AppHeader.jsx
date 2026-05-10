@@ -321,9 +321,8 @@ function AppHeader({
 	centerSlot = null,
 }) {
 	const firstName = getFirstName(user);
-	const headerGridClass = centerSlot
-		? "grid gap-5 lg:grid-cols-[22rem_minmax(20rem,1fr)_22rem] lg:items-center"
-		: "grid gap-5 lg:grid-cols-[22rem_minmax(0,1fr)_22rem] lg:items-center";
+	const headerGridClass =
+		"grid gap-5 lg:grid-cols-[22rem_minmax(0,1fr)_22rem] lg:items-center";
 
 	return (
 		<header className={headerGridClass}>

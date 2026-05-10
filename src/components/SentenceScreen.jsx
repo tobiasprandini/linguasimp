@@ -105,7 +105,7 @@ function SentenceScreen({
 	);
 
 	return (
-		<div className="min-h-screen bg-[#08090d] text-white">
+		<div className="h-svh overflow-hidden bg-[#08090d] text-white">
 			<header className="p-4 sm:p-6 lg:p-8">
 				<div className="w-full">
 					<AppHeader
@@ -148,15 +148,15 @@ function SentenceScreen({
 				</div>
 			</header>
 
-			<div className="flex w-full flex-col px-4 sm:px-6">
+			<div className="flex h-[calc(100svh-7.5rem)] w-full flex-col px-4 sm:h-[calc(100svh-8.5rem)] sm:px-6 lg:h-[calc(100svh-8rem)]">
 				<div
 					ref={mainContentRef}
-					className="flex min-h-[calc(100svh-4rem)] flex-col sm:min-h-[calc(100svh-5rem)]"
+					className="flex min-h-0 flex-1 flex-col"
 				>
-					<div className="flex flex-1 translate-y-8 flex-col items-center justify-center sm:translate-y-10">
-						{topSlot ? <div className="mb-10 w-full max-w-3xl">{topSlot}</div> : null}
+					<div className="flex min-h-0 flex-1 flex-col items-center justify-center">
+						{topSlot ? <div className="mb-6 w-full max-w-3xl">{topSlot}</div> : null}
 
-						<div className="mx-auto flex w-full -translate-y-6 flex-col items-center text-center sm:-translate-y-8">
+						<div className="mx-auto flex w-full flex-col items-center text-center">
 							<AnimatePresence mode="wait">
 								<MotionDiv
 									key={sentence.id}
@@ -221,7 +221,7 @@ function SentenceScreen({
 							</AnimatePresence>
 						</div>
 
-							<div className="mt-24 sm:mt-28">
+							<div className="mt-14 sm:mt-16">
 								<BottomControls
 									onPrevious={onPrevious}
 									canGoBack={canGoBack}
