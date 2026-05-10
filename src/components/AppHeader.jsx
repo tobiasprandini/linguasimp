@@ -322,12 +322,12 @@ function AppHeader({
 }) {
 	const firstName = getFirstName(user);
 	const headerGridClass = centerSlot
-		? "grid gap-5 lg:grid-cols-[auto_minmax(28rem,1fr)_auto] lg:items-center"
-		: "grid gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-center";
+		? "grid gap-5 lg:grid-cols-[22rem_minmax(20rem,1fr)_22rem] lg:items-center"
+		: "grid gap-5 lg:grid-cols-[22rem_minmax(0,1fr)_22rem] lg:items-center";
 
 	return (
 		<header className={headerGridClass}>
-			<nav className="flex w-full rounded-full bg-white/[0.06] p-1 text-sm font-normal sm:w-fit sm:text-base">
+			<nav className="flex w-full rounded-full bg-white/[0.06] p-1 text-sm font-normal sm:w-fit sm:text-base lg:w-[22rem]">
 				<NavLink
 					href="#dashboard"
 					isActive={activePage === "dashboard"}
