@@ -221,7 +221,7 @@ function SentenceScreen({
 							</AnimatePresence>
 						</div>
 
-							<div className="mt-14 sm:mt-16">
+							<div className="mt-20 sm:mt-24">
 								<BottomControls
 									onPrevious={onPrevious}
 									canGoBack={canGoBack}
