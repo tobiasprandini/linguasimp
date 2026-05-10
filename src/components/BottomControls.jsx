@@ -15,8 +15,9 @@ function BottomControls({
 		<div className="flex flex-col items-center">
 			<div className="flex items-center justify-center gap-5">
 				<Button
+					type="button"
 					onClick={onPlayAudio}
-					className="flex h-10 min-w-[6.5rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-all duration-200 hover:bg-white/10 hover:text-slate-100 sm:h-11 sm:min-w-[7rem] sm:text-base"
+					className="flex h-10 min-w-[6.5rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 active:!translate-y-0 active:bg-white/[0.08] sm:h-11 sm:min-w-[7rem] sm:text-base"
 					aria-label={
 						isAudioPlaying
 							? "Pausar audio da frase"
@@ -32,8 +33,9 @@ function BottomControls({
 				</Button>
 
 				<Button
+					type="button"
 					onClick={onToggleTranslation}
-					className="flex h-10 min-w-[7rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-all duration-200 hover:bg-white/10 hover:text-slate-100 sm:h-11 sm:min-w-[7.75rem] sm:text-base"
+					className="flex h-10 min-w-[7rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 active:!translate-y-0 active:bg-white/[0.08] sm:h-11 sm:min-w-[7.75rem] sm:text-base"
 					aria-label={
 						isTranslationVisible ? "Ocultar traducao" : "Mostrar traducao"
 					}

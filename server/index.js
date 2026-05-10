@@ -110,11 +110,11 @@ function hydrateSentenceLesson(sentence) {
 }
 
 function isMissingLessonIdColumn(error) {
-	return error?.message?.includes("lesson_id") || error?.code === "42703";
+	return error?.message?.includes("lesson_id");
 }
 
 function isMissingSpeechSpeedColumn(error) {
-	return error?.message?.includes("speech_speed") || error?.code === "42703";
+	return error?.message?.includes("speech_speed");
 }
 
 function createMissingSpeechSpeedColumnError() {
