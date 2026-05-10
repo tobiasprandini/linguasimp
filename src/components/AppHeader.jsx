@@ -321,9 +321,12 @@ function AppHeader({
 	centerSlot = null,
 }) {
 	const firstName = getFirstName(user);
+	const headerGridClass = centerSlot
+		? "grid gap-5 lg:grid-cols-[auto_minmax(28rem,1fr)_auto] lg:items-center"
+		: "grid gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-center";
 
 	return (
-		<header className="grid gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
+		<header className={headerGridClass}>
 			<nav className="flex w-full rounded-full bg-white/[0.06] p-1 text-sm font-normal sm:w-fit sm:text-base">
 				<NavLink
 					href="#dashboard"
@@ -343,7 +346,7 @@ function AppHeader({
 			</nav>
 
 			{centerSlot ? (
-				<div className="w-full justify-self-center">{centerSlot}</div>
+				<div className="min-w-0 w-full justify-self-center">{centerSlot}</div>
 			) : showLogo ? (
 				<a
 					href="#dashboard"
