@@ -153,10 +153,10 @@ function SentenceScreen({
 					ref={mainContentRef}
 					className="flex min-h-0 flex-1 flex-col"
 				>
-					<div className="flex min-h-0 flex-1 flex-col items-center justify-center">
+					<div className="flex min-h-0 flex-1 flex-col items-center justify-end pb-10 sm:pb-12">
 						{topSlot ? <div className="mb-6 w-full max-w-3xl">{topSlot}</div> : null}
 
-						<div className="mx-auto flex w-full flex-col items-center text-center">
+						<div className="mx-auto flex w-full flex-1 flex-col items-center justify-center text-center">
 							<AnimatePresence mode="wait">
 								<MotionDiv
 									key={sentence.id}
@@ -221,7 +221,7 @@ function SentenceScreen({
 							</AnimatePresence>
 						</div>
 
-							<div className="mt-20 sm:mt-24">
+							<div>
 								<BottomControls
 									onPrevious={onPrevious}
 									canGoBack={canGoBack}
