@@ -106,7 +106,7 @@ function SentenceScreen({
 
 	return (
 		<div className="min-h-screen bg-[#08090d] text-white">
-			<header className="p-4 sm:p-6 lg:p-8">
+			<header className="px-4 pb-4 pt-3 sm:px-6 sm:pb-5 sm:pt-4 lg:px-8 lg:pb-5 lg:pt-5">
 				<div className="w-full">
 					<AppHeader
 						user={user}
@@ -114,8 +114,9 @@ function SentenceScreen({
 						learningLanguage={learningLanguage}
 						onSelectLanguage={onSelectLanguage}
 						onSignOut={onSignOut}
+						showLogo={false}
 					/>
-					<div className="mx-auto mt-5 w-full max-w-md">
+					<div className="mx-auto mt-1 w-full max-w-md lg:-mt-1">
 						<div className="mb-3 flex items-center justify-between text-[0.68rem] font-normal text-slate-500 sm:text-sm">
 							<MotionDiv
 								key={`${currentSentenceIndex}-${totalSentences}`}

@@ -317,6 +317,7 @@ function AppHeader({
 	learningLanguage = "en",
 	onSelectLanguage,
 	onSignOut,
+	showLogo = true,
 }) {
 	const firstName = getFirstName(user);
 
@@ -340,17 +341,21 @@ function AppHeader({
 				</NavLink>
 			</nav>
 
-			<a
-				href="#dashboard"
-				className="justify-self-center"
-				aria-label="Linguasimp dashboard"
-			>
-				<img
-					src="/linguasimp-logo-current.png"
-					alt="LinguaSimp"
-					className="block h-14 max-w-[16rem] object-contain sm:h-16 sm:max-w-[20rem]"
-				/>
-			</a>
+			{showLogo ? (
+				<a
+					href="#dashboard"
+					className="justify-self-center"
+					aria-label="Linguasimp dashboard"
+				>
+					<img
+						src="/linguasimp-logo-current.png"
+						alt="LinguaSimp"
+						className="block h-14 max-w-[16rem] object-contain sm:h-16 sm:max-w-[20rem]"
+					/>
+				</a>
+			) : (
+				<div className="hidden lg:block" aria-hidden="true" />
+			)}
 
 			<div className="flex items-center justify-between gap-4 lg:justify-end">
 				<LanguageSwitcher
