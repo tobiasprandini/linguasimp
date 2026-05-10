@@ -106,7 +106,7 @@ function SentenceScreen({
 
 	return (
 		<div className="min-h-screen bg-[#08090d] text-white">
-			<header className="px-4 py-3 sm:px-6 sm:py-4 lg:px-8 lg:py-5">
+			<header className="p-4 sm:p-6 lg:p-8">
 				<div className="w-full">
 					<AppHeader
 						user={user}

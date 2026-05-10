@@ -300,7 +300,7 @@ function NavLink({ href, isActive, children }) {
 	return (
 		<a
 			href={href}
-			className={`rounded-full px-5 py-3 transition ${
+			className={`flex justify-center rounded-full px-5 py-3 transition ${
 				isActive
 					? "bg-[#8b6cf4] text-white"
 					: "text-slate-400 hover:text-white"
@@ -327,7 +327,7 @@ function AppHeader({
 
 	return (
 		<header className={headerGridClass}>
-			<nav className="flex w-full rounded-full bg-white/[0.06] p-1 text-sm font-normal sm:w-fit sm:text-base lg:w-[22rem]">
+			<nav className="grid w-full grid-cols-3 rounded-full bg-white/[0.06] p-1 text-sm font-normal sm:text-base lg:w-[22rem]">
 				<NavLink
 					href="#dashboard"
 					isActive={activePage === "dashboard"}
