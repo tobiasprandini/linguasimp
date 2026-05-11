@@ -12,18 +12,6 @@ import { motion } from "framer-motion";
 import AppHeader from "./AppHeader";
 import { buildPronunciationHint } from "../lib/buildPronunciationHint";
 
-const languageLabels = {
-	en: "Inglês",
-	es: "Espanhol",
-	fr: "Francês",
-	de: "Alemão",
-	it: "Italiano",
-	ru: "Russo",
-	no: "Norueguês",
-	el: "Grego",
-	zh: "Chinês",
-	ja: "Japonês",
-};
 const FLASHCARD_SCHEDULE_STORAGE_KEY_PREFIX = "linguasimp-flashcard-schedule";
 const REVIEW_DELAYS = {
 	again: 0,
@@ -491,10 +479,7 @@ function FlashcardsScreen({
 						<section className="h-full rounded-[1.5rem] border border-white/10 bg-[#171a24] p-5 text-white shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:p-8 xl:p-9">
 							<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 								<div>
-									<p className="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-normal text-slate-300">
-										{languageLabels[learningLanguage] ?? languageLabels.en}
-									</p>
-									<h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-5xl">
+									<h1 className="text-3xl font-semibold leading-tight text-white sm:text-5xl">
 										Revisão rápida
 									</h1>
 									<div className="mt-5 grid w-full max-w-xl grid-cols-3 rounded-[1rem] bg-white/[0.055] p-1 text-sm font-semibold text-slate-400">
