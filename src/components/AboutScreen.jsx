@@ -1,30 +1,12 @@
 import { ArrowRight, Blocks, Headphones, Sparkles } from "lucide-react";
+import PublicHeader from "./PublicHeader";
 
 function AboutScreen() {
 	return (
 		<div className="min-h-screen overflow-hidden bg-[#050507] text-white">
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(124,92,232,0.18),transparent_34%),linear-gradient(180deg,rgba(5,5,7,0)_0%,#050507_72%)]" />
 			<div className="relative mx-auto flex min-h-screen max-w-[86rem] flex-col px-5 py-6 sm:px-8 lg:px-12">
-				<header className="flex shrink-0 flex-wrap items-center justify-between gap-5">
-					<a href="#landing" aria-label="LinguaSimp inicio" className="inline-flex">
-						<img
-							src="/linguasimp-logo-current.png"
-							alt="LinguaSimp"
-							className="block w-52 object-contain object-left sm:w-60"
-						/>
-					</a>
-					<nav className="flex items-center gap-6 text-base text-slate-300 sm:text-lg">
-						<a href="#sobre" className="text-white">
-							Sobre
-						</a>
-						<a href="#planos" className="transition hover:text-white">
-							Planos
-						</a>
-						<a href="#login" className="transition hover:text-white">
-							Entrar
-						</a>
-					</nav>
-				</header>
+				<PublicHeader />
 
 				<main className="grid flex-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,34rem)]">
 					<section>

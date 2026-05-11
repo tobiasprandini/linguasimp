@@ -1,4 +1,5 @@
 import { ArrowRight, Check, GraduationCap, ShieldCheck, Zap } from "lucide-react";
+import PublicHeader from "./PublicHeader";
 
 const plans = [
 	{
@@ -38,26 +39,7 @@ function PlansScreen() {
 	return (
 		<div className="min-h-screen bg-[#050507] text-white">
 			<div className="relative mx-auto flex min-h-screen max-w-[86rem] flex-col px-5 py-6 sm:px-8 lg:px-12">
-				<header className="flex shrink-0 flex-wrap items-center justify-between gap-5">
-					<a href="#landing" aria-label="LinguaSimp inicio" className="inline-flex">
-						<img
-							src="/linguasimp-logo-current.png"
-							alt="LinguaSimp"
-							className="block w-52 object-contain object-left sm:w-60"
-						/>
-					</a>
-					<nav className="flex items-center gap-6 text-base text-slate-300 sm:text-lg">
-						<a href="#sobre" className="transition hover:text-white">
-							Sobre
-						</a>
-						<a href="#planos" className="text-white">
-							Planos
-						</a>
-						<a href="#login" className="transition hover:text-white">
-							Entrar
-						</a>
-					</nav>
-				</header>
+				<PublicHeader />
 
 				<main className="flex flex-1 flex-col py-14 sm:py-16">
 					<section className="max-w-4xl">
