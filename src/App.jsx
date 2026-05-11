@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import AboutScreen from "./components/AboutScreen";
 import AuthScreen from "./components/AuthScreen";
 import DashboardScreen from "./components/DashboardScreen";
 import SentenceScreen from "./components/SentenceScreen";
@@ -7,6 +8,7 @@ import FlashcardsScreen from "./components/FlashcardsScreen";
 import LandingScreen from "./components/LandingScreen";
 import LanguageMenu from "./components/LanguageMenu";
 import LessonCompleteScreen from "./components/LessonCompleteScreen";
+import PlansScreen from "./components/PlansScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import ProgressExamplesScreen from "./components/ProgressExamplesScreen";
 import WalletDemoScreen from "./components/WalletDemoScreen";
@@ -188,6 +190,24 @@ function getViewModeFromHash() {
 
 	if (route === "admin" || pathRoute === "admin") {
 		return "admin";
+	}
+
+	if (
+		route === "sobre" ||
+		route === "about" ||
+		pathRoute === "sobre" ||
+		pathRoute === "about"
+	) {
+		return "about";
+	}
+
+	if (
+		route === "planos" ||
+		route === "plans" ||
+		pathRoute === "planos" ||
+		pathRoute === "plans"
+	) {
+		return "plans";
 	}
 
 	if (
@@ -1372,6 +1392,14 @@ function App() {
 
 	if (viewMode === "admin") {
 		return <AdminScreen />;
+	}
+
+	if (viewMode === "about") {
+		return <AboutScreen />;
+	}
+
+	if (viewMode === "plans") {
+		return <PlansScreen />;
 	}
 
 	if (viewMode === "landing") {
