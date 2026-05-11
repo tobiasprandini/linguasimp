@@ -5,18 +5,6 @@ import {
 } from "lucide-react";
 import AppHeader from "./AppHeader";
 
-const languageLabels = {
-	en: "Inglês americano",
-	es: "Espanhol latino-americano",
-	fr: "Francês parisiense",
-	de: "Alemão padrão",
-	it: "Italiano padrão",
-	ru: "Russo padrão",
-	no: "Norueguês padrão",
-	el: "Grego moderno",
-	zh: "Mandarim",
-	ja: "Japonês padrão",
-};
 const certificateLabels = {
 	en: "MOVERS A1",
 	es: "DELE A1",
@@ -394,10 +382,7 @@ function DashboardScreen({
 							<div className="min-h-[21.75rem] overflow-hidden rounded-[1.5rem] bg-[#1b1d27] p-7">
 								<div className="flex h-full flex-col justify-between">
 									<div>
-										<p className="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-normal text-slate-300">
-											{languageLabels[learningLanguage] ?? languageLabels.en}
-										</p>
-										<h1 className="mt-4 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+										<h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl">
 											Continue sua próxima rodada
 										</h1>
 										<p className="mt-1 text-base font-normal leading-relaxed text-slate-500">
