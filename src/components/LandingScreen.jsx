@@ -12,30 +12,24 @@ function LandingScreen() {
 	return (
 		<div
 			id="landing"
-			className="relative h-screen overflow-hidden bg-[#050507] bg-no-repeat px-5 py-4 text-white sm:px-8 lg:px-16"
-			style={{
-				backgroundImage: "url('/landing-background.png')",
-				backgroundPosition: "calc(100% - 1.5rem) 52%",
-				backgroundSize: "min(68vw, 76rem) auto",
-			}}
+			className="relative h-screen overflow-hidden bg-[#050507] px-5 py-4 text-white sm:px-8 lg:px-16"
 		>
-			<div className="absolute inset-0 bg-gradient-to-r from-black via-black/82 via-39% to-black/5" />
 			<div className="relative z-10 mx-auto flex h-full max-w-[108rem] flex-col overflow-visible">
 				<PublicHeader />
 
-				<main className="grid flex-1 items-center pb-10 pt-2">
-					<section className="max-w-[40rem] -translate-y-1 text-left">
-						<h1 className="max-w-[40rem] text-5xl font-semibold leading-[1.1] tracking-normal text-white sm:text-[3.25rem] lg:text-[3.7rem] xl:text-[4rem]">
+				<main className="grid flex-1 place-items-center pb-10 pt-2">
+					<section className="mx-auto max-w-[48rem] -translate-y-3 text-center">
+						<h1 className="mx-auto max-w-[44rem] text-5xl font-semibold leading-[1.1] tracking-normal text-white sm:text-[3.25rem] lg:text-[3.7rem] xl:text-[4rem]">
 							Aprenda idiomas
 							<br />
 							<span className="text-[#7c4dff]">por blocos</span>
 						</h1>
-						<p className="mt-8 max-w-[39rem] text-base font-normal leading-relaxed text-slate-400 sm:text-lg lg:text-xl">
+						<p className="mx-auto mt-8 max-w-[42rem] text-base font-normal leading-relaxed text-slate-400 sm:text-lg lg:text-xl">
 							O LinguaSimp transforma frases reais em blocos de sentido.
 							Você lê, escuta, traduz e marca o que já sabe, aprendendo com
 							frases reais, bloco por bloco.
 						</p>
-						<div className="mt-9 flex flex-wrap items-center gap-5">
+						<div className="mt-9 flex flex-wrap items-center justify-center gap-5">
 							<a
 								href="#signup"
 								className="inline-flex h-16 w-full max-w-[18rem] items-center justify-center gap-4 rounded-[1.1rem] bg-[#6e46e8] px-8 text-xl font-normal text-white shadow-[0_22px_55px_rgba(110,70,232,0.34)] transition hover:-translate-y-0.5 hover:bg-[#8b6cf4] sm:w-[18rem]"
@@ -54,7 +48,7 @@ function LandingScreen() {
 							</a>
 						</div>
 
-						<div className="mt-11 flex flex-wrap items-center gap-6">
+						<div className="mt-11 flex flex-wrap items-center justify-center gap-6">
 							<div className="flex -space-x-4">
 								{["A", "M", "R", "L"].map((initial, index) => (
 									<span
