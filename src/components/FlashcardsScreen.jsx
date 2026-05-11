@@ -25,6 +25,15 @@ const reviewModes = [
 	{ id: "write", label: "Escrever" },
 	{ id: "speak", label: "Falar" },
 ];
+const drawingReviewLanguages = new Set(["ja", "zh"]);
+
+function getAvailableReviewModes(languageCode) {
+	if (!drawingReviewLanguages.has(languageCode)) {
+		return reviewModes;
+	}
+
+	return [...reviewModes, { id: "draw", label: "Desenhar" }];
+}
 
 function clampPercentage(value) {
 	return Math.min(Math.max(value, 0), 100);
@@ -227,6 +236,154 @@ function FlashcardBack({ card, onPlayAudio }) {
 	);
 }
 
+function DrawingReview({ card, isRevealed, onReveal }) {
+	const canvasRef = useRef(null);
+	const isDrawingRef = useRef(false);
+	const [hasDrawing, setHasDrawing] = useState(false);
+	const expectedAnswer = getExpectedAnswer(card);
+
+	function prepareCanvas() {
+		const canvas = canvasRef.current;
+
+		if (!canvas) {
+			return;
+		}
+
+		const rect = canvas.getBoundingClientRect();
+		const pixelRatio = window.devicePixelRatio || 1;
+		canvas.width = Math.max(Math.floor(rect.width * pixelRatio), 1);
+		canvas.height = Math.max(Math.floor(rect.height * pixelRatio), 1);
+
+		const context = canvas.getContext("2d");
+		context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+		context.clearRect(0, 0, rect.width, rect.height);
+		context.lineCap = "round";
+		context.lineJoin = "round";
+		context.lineWidth = 9;
+		context.strokeStyle = "#f8fafc";
+	}
+
+	useEffect(() => {
+		prepareCanvas();
+
+		window.addEventListener("resize", prepareCanvas);
+
+		return () => {
+			window.removeEventListener("resize", prepareCanvas);
+		};
+	}, [card.block.blockId]);
+
+	function getCanvasPoint(event) {
+		const rect = canvasRef.current.getBoundingClientRect();
+
+		return {
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top,
+		};
+	}
+
+	function handlePointerDown(event) {
+		const canvas = canvasRef.current;
+		const context = canvas.getContext("2d");
+		const point = getCanvasPoint(event);
+
+		event.preventDefault();
+		canvas.setPointerCapture(event.pointerId);
+		isDrawingRef.current = true;
+		context.beginPath();
+		context.moveTo(point.x, point.y);
+	}
+
+	function handlePointerMove(event) {
+		if (!isDrawingRef.current) {
+			return;
+		}
+
+		const context = canvasRef.current.getContext("2d");
+		const point = getCanvasPoint(event);
+
+		event.preventDefault();
+		context.lineTo(point.x, point.y);
+		context.stroke();
+		setHasDrawing(true);
+	}
+
+	function stopDrawing(event) {
+		if (!isDrawingRef.current) {
+			return;
+		}
+
+		isDrawingRef.current = false;
+		event.currentTarget.releasePointerCapture?.(event.pointerId);
+	}
+
+	function clearDrawing() {
+		prepareCanvas();
+		setHasDrawing(false);
+	}
+
+	return (
+		<div className="flex w-full max-w-4xl flex-col items-center gap-6">
+			<FlashcardFront card={card} />
+
+			<div
+				className={`grid w-full gap-4 ${
+					isRevealed ? "lg:grid-cols-2" : "lg:grid-cols-1"
+				}`}
+			>
+				<div className="rounded-[1.25rem] border border-white/10 bg-white/[0.035] p-4">
+					<div className="mb-3 flex items-center justify-between gap-3">
+						<p className="text-sm font-semibold text-slate-400">Seu desenho</p>
+						<button
+							type="button"
+							onClick={clearDrawing}
+							disabled={!hasDrawing}
+							className="h-9 cursor-pointer rounded-[0.85rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+						>
+							Limpar
+						</button>
+					</div>
+					<canvas
+						ref={canvasRef}
+						onPointerDown={handlePointerDown}
+						onPointerMove={handlePointerMove}
+						onPointerUp={stopDrawing}
+						onPointerCancel={stopDrawing}
+						onPointerLeave={stopDrawing}
+						className="h-56 w-full touch-none rounded-[1rem] border border-white/10 bg-[#08090d] shadow-[inset_0_1px_18px_rgba(0,0,0,0.35)]"
+						aria-label="Area para desenhar o ideograma"
+					/>
+				</div>
+
+				{isRevealed ? (
+					<div className="flex min-h-56 flex-col items-center justify-center rounded-[1.25rem] border border-[#8b6cf4]/30 bg-[#8b6cf4]/10 p-4 text-center">
+						<p className="mb-3 text-sm font-semibold text-[#b8a6ff]">
+							Original
+						</p>
+						<div className="flex min-h-32 items-center justify-center text-[4.5rem] font-semibold leading-none text-white sm:text-[5.5rem]">
+							{expectedAnswer}
+						</div>
+					</div>
+				) : null}
+			</div>
+
+			{isRevealed ? (
+				<p className="text-center text-sm font-medium text-slate-400">
+					Compare seu desenho com o original e escolha a dificuldade abaixo.
+				</p>
+			) : (
+				<button
+					type="button"
+					onClick={onReveal}
+					className="inline-flex h-12 cursor-pointer items-center justify-center rounded-[1rem] bg-[#8b6cf4] px-6 text-base font-semibold text-[#070914] transition hover:bg-[#9b7cff]"
+				>
+					Mostrar original
+				</button>
+			)}
+		</div>
+	);
+}
+
 function FlashcardsScreen({
 	cards,
 	onPlayBlockAudio,
@@ -260,6 +417,12 @@ function FlashcardsScreen({
 		cards.length > 0 ? Math.round((pendingCount / cards.length) * 100) : 0;
 	const expectedAnswer = getExpectedAnswer(currentCard);
 	const speechRecognitionSupported = Boolean(getSpeechRecognitionConstructor());
+	const availableReviewModes = getAvailableReviewModes(learningLanguage);
+	const activeReviewMode = availableReviewModes.some(
+		(mode) => mode.id === reviewMode,
+	)
+		? reviewMode
+		: "cards";
 
 	function resetAnswerState() {
 		setWrittenAnswer("");
@@ -482,8 +645,14 @@ function FlashcardsScreen({
 									<h1 className="text-3xl font-semibold leading-tight text-white sm:text-5xl">
 										Revisão rápida
 									</h1>
-									<div className="mt-5 grid w-full max-w-xl grid-cols-3 rounded-[1rem] bg-white/[0.055] p-1 text-sm font-semibold text-slate-400">
-										{reviewModes.map((mode) => (
+									<div
+										className={`mt-5 grid w-full max-w-xl rounded-[1rem] bg-white/[0.055] p-1 text-sm font-semibold text-slate-400 ${
+											availableReviewModes.length === 4
+												? "grid-cols-2 sm:grid-cols-4"
+												: "grid-cols-3"
+										}`}
+									>
+										{availableReviewModes.map((mode) => (
 											<button
 												key={mode.id}
 												type="button"
@@ -493,7 +662,7 @@ function FlashcardsScreen({
 													resetAnswerState();
 												}}
 												className={`h-10 cursor-pointer rounded-[0.8rem] transition ${
-													reviewMode === mode.id
+													activeReviewMode === mode.id
 														? "bg-[#8b6cf4] text-white"
 														: "hover:bg-white/8 hover:text-white"
 												}`}
@@ -520,12 +689,19 @@ function FlashcardsScreen({
 							</div>
 
 							<div className="mt-7 flex min-h-[20rem] w-full flex-col items-center justify-center rounded-[1.35rem] border border-white/10 bg-[#0f1119] px-6 py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:min-h-[23rem] sm:px-10 xl:min-h-[24rem]">
-								{isFlipped ? (
+								{activeReviewMode === "draw" ? (
+									<DrawingReview
+										key={currentCard.block.blockId}
+										card={currentCard}
+										isRevealed={isFlipped}
+										onReveal={() => setIsFlipped(true)}
+									/>
+								) : isFlipped ? (
 									<FlashcardBack
 										card={currentCard}
 										onPlayAudio={onPlayBlockAudio}
 									/>
-								) : reviewMode === "cards" ? (
+								) : activeReviewMode === "cards" ? (
 									<button
 										type="button"
 										onClick={() => setIsFlipped(true)}
@@ -537,7 +713,7 @@ function FlashcardsScreen({
 									<div className="flex w-full max-w-3xl flex-col items-center gap-7">
 										<FlashcardFront card={currentCard} />
 
-										{reviewMode === "write" ? (
+										{activeReviewMode === "write" ? (
 											<form
 												onSubmit={handleCheckWrittenAnswer}
 												className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
@@ -591,7 +767,11 @@ function FlashcardsScreen({
 									className="flex h-12 min-w-[7.5rem] cursor-pointer items-center justify-center gap-2 rounded-[1rem] border border-white/10 bg-white/5 px-5 text-base font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
 								>
 									<RotateCcw className="size-4 stroke-[2]" />
-									Virar
+									{activeReviewMode === "draw"
+										? isFlipped
+											? "Ocultar original"
+											: "Mostrar original"
+										: "Virar"}
 								</button>
 								{isFlipped ? (
 									<>
