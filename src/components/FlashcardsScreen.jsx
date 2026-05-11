@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { CalendarDays, Check, Clock3, RotateCcw, Volume2 } from "lucide-react";
+import {
+	CalendarDays,
+	Check,
+	Clock3,
+	Keyboard,
+	Mic,
+	RotateCcw,
+	Volume2,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import AppHeader from "./AppHeader";
 import { buildPronunciationHint } from "../lib/buildPronunciationHint";
@@ -24,6 +32,11 @@ const REVIEW_DELAYS = {
 	easy: 3 * 24 * 60 * 60 * 1000,
 };
 const MotionPath = motion.path;
+const reviewModes = [
+	{ id: "cards", label: "Virar card" },
+	{ id: "write", label: "Escrever" },
+	{ id: "speak", label: "Falar" },
+];
 
 function clampPercentage(value) {
 	return Math.min(Math.max(value, 0), 100);
@@ -156,6 +169,28 @@ function excludeRetryCards(queue, retryBlockIds) {
 	return queue.filter((card) => !retryBlockIds.has(card.block.blockId));
 }
 
+function normalizeAnswer(value) {
+	return String(value ?? "")
+		.trim()
+		.toLowerCase()
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/[^\p{L}\p{N}\s]/gu, "")
+		.replace(/\s+/g, " ");
+}
+
+function getExpectedAnswer(card) {
+	return card?.block?.surface ?? "";
+}
+
+function getSpeechRecognitionConstructor() {
+	if (typeof window === "undefined") {
+		return null;
+	}
+
+	return window.SpeechRecognition ?? window.webkitSpeechRecognition ?? null;
+}
+
 function FlashcardFront({ card }) {
 	return (
 		<div className="flex flex-wrap justify-center gap-x-2 gap-y-3 text-center text-[1.75rem] leading-tight text-slate-100 sm:text-[2.25rem]">
@@ -213,7 +248,12 @@ function FlashcardsScreen({
 	onSelectLanguage,
 	onSignOut,
 }) {
+	const [reviewMode, setReviewMode] = useState("cards");
 	const [isFlipped, setIsFlipped] = useState(false);
+	const [writtenAnswer, setWrittenAnswer] = useState("");
+	const [spokenAnswer, setSpokenAnswer] = useState("");
+	const [answerMessage, setAnswerMessage] = useState("");
+	const [isListening, setIsListening] = useState(false);
 	const [schedule, setSchedule] = useState(() =>
 		loadStoredSchedule(learningLanguage),
 	);
@@ -221,6 +261,7 @@ function FlashcardsScreen({
 		buildDueQueue(cards, loadStoredSchedule(learningLanguage)),
 	);
 	const [retryQueue, setRetryQueue] = useState([]);
+	const recognitionRef = useRef(null);
 	const retryBlockIdsRef = useRef(new Set());
 	const previousLanguageRef = useRef(learningLanguage);
 	const currentCard = reviewQueue[0] ?? retryQueue[0] ?? null;
@@ -229,6 +270,20 @@ function FlashcardsScreen({
 	const pendingCount = Math.max(cards.length - activeReviewCount, 0);
 	const scheduledPercent =
 		cards.length > 0 ? Math.round((pendingCount / cards.length) * 100) : 0;
+	const expectedAnswer = getExpectedAnswer(currentCard);
+	const speechRecognitionSupported = Boolean(getSpeechRecognitionConstructor());
+
+	function resetAnswerState() {
+		setWrittenAnswer("");
+		setSpokenAnswer("");
+		setAnswerMessage("");
+		setIsListening(false);
+
+		if (recognitionRef.current) {
+			recognitionRef.current.abort();
+			recognitionRef.current = null;
+		}
+	}
 
 	useEffect(() => {
 		const timerId = window.setTimeout(() => {
@@ -264,10 +319,19 @@ function FlashcardsScreen({
 				return [...refreshedQueue, ...missingRetryCards];
 			});
 			setIsFlipped(false);
+			resetAnswerState();
 		}, 0);
 
 		return () => window.clearTimeout(timerId);
 	}, [cards, learningLanguage]);
+
+	useEffect(() => {
+		return () => {
+			if (recognitionRef.current) {
+				recognitionRef.current.abort();
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		if (activeReviewCount > 0 || cards.length === 0) {
@@ -324,6 +388,7 @@ function FlashcardsScreen({
 				);
 			}
 			setIsFlipped(false);
+			resetAnswerState();
 			return;
 		}
 
@@ -343,6 +408,67 @@ function FlashcardsScreen({
 			setReviewQueue((queue) => queue.slice(1));
 		}
 		setIsFlipped(false);
+		resetAnswerState();
+	}
+
+	function handleCheckWrittenAnswer(event) {
+		event.preventDefault();
+
+		if (!currentCard) {
+			return;
+		}
+
+		if (normalizeAnswer(writtenAnswer) === normalizeAnswer(expectedAnswer)) {
+			setAnswerMessage("Resposta certa.");
+			setIsFlipped(true);
+			return;
+		}
+
+		setAnswerMessage(`Ainda não. Resposta esperada: ${expectedAnswer}`);
+	}
+
+	function handleStartSpeechReview() {
+		if (!currentCard || isListening) {
+			return;
+		}
+
+		const Recognition = getSpeechRecognitionConstructor();
+
+		if (!Recognition) {
+			setAnswerMessage("Seu navegador não suporta revisão por voz.");
+			return;
+		}
+
+		const recognition = new Recognition();
+		recognition.lang = learningLanguage === "en" ? "en-US" : learningLanguage;
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+		recognitionRef.current = recognition;
+		setIsListening(true);
+		setAnswerMessage("Ouvindo...");
+
+		recognition.onresult = (event) => {
+			const transcript = event.results?.[0]?.[0]?.transcript ?? "";
+			setSpokenAnswer(transcript);
+
+			if (normalizeAnswer(transcript) === normalizeAnswer(expectedAnswer)) {
+				setAnswerMessage("Resposta certa.");
+				setIsFlipped(true);
+			} else {
+				setAnswerMessage(`Ouvi "${transcript}". Resposta esperada: ${expectedAnswer}`);
+			}
+		};
+
+		recognition.onerror = () => {
+			setAnswerMessage("Não consegui ouvir. Tente de novo.");
+		};
+
+		recognition.onend = () => {
+			setIsListening(false);
+			recognitionRef.current = null;
+		};
+
+		recognition.start();
 	}
 
 	return (
@@ -371,6 +497,26 @@ function FlashcardsScreen({
 									<h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-5xl">
 										Revisão rápida
 									</h1>
+									<div className="mt-5 grid w-full max-w-xl grid-cols-3 rounded-[1rem] bg-white/[0.055] p-1 text-sm font-semibold text-slate-400">
+										{reviewModes.map((mode) => (
+											<button
+												key={mode.id}
+												type="button"
+												onClick={() => {
+													setReviewMode(mode.id);
+													setIsFlipped(false);
+													resetAnswerState();
+												}}
+												className={`h-10 cursor-pointer rounded-[0.8rem] transition ${
+													reviewMode === mode.id
+														? "bg-[#8b6cf4] text-white"
+														: "hover:bg-white/8 hover:text-white"
+												}`}
+											>
+												{mode.label}
+											</button>
+										))}
+									</div>
 								</div>
 								<div className="grid grid-cols-2 gap-3 text-sm sm:min-w-64">
 									<div className="rounded-[1rem] bg-white/[0.05] p-4">
@@ -388,25 +534,68 @@ function FlashcardsScreen({
 								</div>
 							</div>
 
-							<div
-								role="button"
-								tabIndex={0}
-								onClick={() => setIsFlipped((value) => !value)}
-								onKeyDown={(event) => {
-									if (event.key === "Enter" || event.key === " ") {
-										event.preventDefault();
-										setIsFlipped((value) => !value);
-									}
-								}}
-								className="mt-7 flex min-h-[20rem] w-full cursor-pointer items-center justify-center rounded-[1.35rem] border border-white/10 bg-[#0f1119] px-6 py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition hover:border-[#8b6cf4]/45 sm:min-h-[23rem] sm:px-10 xl:min-h-[24rem]"
-							>
+							<div className="mt-7 flex min-h-[20rem] w-full flex-col items-center justify-center rounded-[1.35rem] border border-white/10 bg-[#0f1119] px-6 py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:min-h-[23rem] sm:px-10 xl:min-h-[24rem]">
 								{isFlipped ? (
 									<FlashcardBack
 										card={currentCard}
 										onPlayAudio={onPlayBlockAudio}
 									/>
+								) : reviewMode === "cards" ? (
+									<button
+										type="button"
+										onClick={() => setIsFlipped(true)}
+										className="flex min-h-[16rem] w-full cursor-pointer items-center justify-center rounded-[1rem] transition hover:bg-white/[0.025]"
+									>
+										<FlashcardFront card={currentCard} />
+									</button>
 								) : (
-									<FlashcardFront card={currentCard} />
+									<div className="flex w-full max-w-3xl flex-col items-center gap-7">
+										<FlashcardFront card={currentCard} />
+
+										{reviewMode === "write" ? (
+											<form
+												onSubmit={handleCheckWrittenAnswer}
+												className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+											>
+												<input
+													value={writtenAnswer}
+													onChange={(event) => setWrittenAnswer(event.target.value)}
+													placeholder="Digite a resposta"
+													className="h-12 min-w-0 flex-1 rounded-[1rem] border border-white/10 bg-white/[0.055] px-4 text-base font-semibold text-white outline-none transition placeholder:text-slate-600 focus:border-[#8b6cf4]/65"
+												/>
+												<button
+													type="submit"
+													className="inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[1rem] bg-[#8b6cf4] px-5 text-base font-semibold text-[#070914] transition hover:bg-[#9b7cff]"
+												>
+													<Keyboard className="size-4 stroke-[2.2]" />
+													Conferir
+												</button>
+											</form>
+										) : (
+											<div className="flex w-full max-w-xl flex-col items-center gap-3">
+												<button
+													type="button"
+													onClick={handleStartSpeechReview}
+													disabled={isListening || !speechRecognitionSupported}
+													className="inline-flex h-12 cursor-pointer items-center justify-center gap-3 rounded-[1rem] bg-[#8b6cf4] px-6 text-base font-semibold text-[#070914] transition hover:bg-[#9b7cff] disabled:cursor-not-allowed disabled:opacity-45"
+												>
+													<Mic className="size-5 stroke-[2.2]" />
+													{isListening ? "Ouvindo..." : "Gravar resposta"}
+												</button>
+												{spokenAnswer ? (
+													<p className="text-sm text-slate-500">
+														Você disse: <span className="text-slate-300">{spokenAnswer}</span>
+													</p>
+												) : null}
+											</div>
+										)}
+
+										{answerMessage ? (
+											<p className="text-center text-sm font-medium text-slate-400">
+												{answerMessage}
+											</p>
+										) : null}
+									</div>
 								)}
 							</div>
 
