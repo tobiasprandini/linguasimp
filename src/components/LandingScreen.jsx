@@ -32,9 +32,9 @@ function LandingScreen() {
 						<div className="mt-9 flex flex-wrap items-center justify-center gap-5">
 							<a
 								href="#signup"
-								className="inline-flex h-16 w-full max-w-[18rem] items-center justify-center gap-4 rounded-[1.1rem] bg-[#6e46e8] px-8 text-xl font-normal text-white shadow-[0_22px_55px_rgba(110,70,232,0.34)] transition hover:-translate-y-0.5 hover:bg-[#8b6cf4] sm:w-[18rem]"
+								className="inline-flex h-16 w-full max-w-[21rem] items-center justify-center gap-4 rounded-[1.1rem] bg-[#6e46e8] px-7 text-lg font-normal text-white shadow-[0_22px_55px_rgba(110,70,232,0.34)] transition hover:-translate-y-0.5 hover:bg-[#8b6cf4] sm:w-[21rem] sm:text-xl"
 							>
-								Começar agora
+								<span className="whitespace-nowrap">Começar agora</span>
 								<ArrowRight className="size-6 stroke-[2.1]" />
 							</a>
 							<a
