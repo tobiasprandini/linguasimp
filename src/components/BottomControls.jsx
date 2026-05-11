@@ -14,10 +14,10 @@ function BottomControls({
 	return (
 		<div className="flex flex-col items-center">
 			<div className="flex items-center justify-center gap-5">
-				<Button
+				<button
 					type="button"
 					onClick={onPlayAudio}
-					className="flex h-10 min-w-[6.5rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 active:!translate-y-0 active:bg-white/[0.08] sm:h-11 sm:min-w-[7rem] sm:text-base"
+					className="relative z-10 inline-flex h-10 min-w-[6.5rem] cursor-pointer select-none items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 outline-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 focus-visible:border-[#8b6cf4]/70 focus-visible:ring-2 focus-visible:ring-[#8b6cf4]/30 active:bg-white/[0.08] sm:h-11 sm:min-w-[7rem] sm:text-base [&_*]:pointer-events-none"
 					aria-label={
 						isAudioPlaying
 							? "Pausar audio da frase"
@@ -30,12 +30,12 @@ function BottomControls({
 						<Volume2 className="size-4 stroke-[2]" />
 					)}
 					{isAudioPlaying ? "Pausar" : "Ouvir"}
-				</Button>
+				</button>
 
-				<Button
+				<button
 					type="button"
 					onClick={onToggleTranslation}
-					className="flex h-10 min-w-[7rem] cursor-pointer items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 shadow-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 active:!translate-y-0 active:bg-white/[0.08] sm:h-11 sm:min-w-[7.75rem] sm:text-base"
+					className="relative z-10 inline-flex h-10 min-w-[7rem] cursor-pointer select-none items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 outline-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 focus-visible:border-[#8b6cf4]/70 focus-visible:ring-2 focus-visible:ring-[#8b6cf4]/30 active:bg-white/[0.08] sm:h-11 sm:min-w-[7.75rem] sm:text-base [&_*]:pointer-events-none"
 					aria-label={
 						isTranslationVisible ? "Ocultar traducao" : "Mostrar traducao"
 					}
@@ -46,7 +46,7 @@ function BottomControls({
 						<Eye className="size-4 stroke-[2]" />
 					)}
 					{isTranslationVisible ? "Esconder" : "Traduzir"}
-				</Button>
+				</button>
 			</div>
 
 				{translationSlot}
