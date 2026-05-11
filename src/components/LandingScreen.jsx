@@ -39,12 +39,12 @@ function LandingScreen() {
 							</a>
 							<a
 								href="#signup"
-								className="inline-flex h-16 w-full max-w-[18rem] items-center justify-center gap-4 rounded-[1.1rem] border border-white/15 bg-black/25 px-8 text-xl font-normal text-slate-200 transition hover:border-[#8b6cf4]/55 hover:bg-white/5 sm:w-[18rem]"
+								className="inline-flex h-16 w-full max-w-[21rem] items-center justify-center gap-4 rounded-[1.1rem] border border-white/15 bg-black/25 px-7 text-lg font-normal text-slate-200 transition hover:border-[#8b6cf4]/55 hover:bg-white/5 sm:w-[21rem] sm:text-xl"
 							>
 								<span className="grid size-10 place-items-center rounded-full border border-[#8b6cf4]/60 text-[#8b6cf4]">
 									<Play className="ml-0.5 size-5 fill-current stroke-[2.1]" />
 								</span>
-								Ver como funciona
+								<span className="whitespace-nowrap">Ver como funciona</span>
 							</a>
 						</div>
 
