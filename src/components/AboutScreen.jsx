@@ -1,92 +1,174 @@
-import { ArrowRight, Blocks, Headphones, Sparkles } from "lucide-react";
+import {
+	Globe2,
+	Heart,
+	MessageCircle,
+	Music2,
+	Send,
+	Share2,
+	Sparkles,
+} from "lucide-react";
 import PublicHeader from "./PublicHeader";
+
+const values = [
+	{
+		icon: Globe2,
+		title: "Conexão real",
+		text: "Idiomas aproximam pessoas, histórias e culturas.",
+	},
+	{
+		icon: MessageCircle,
+		title: "Contexto sempre",
+		text: "Aprendizado com frases reais, do jeito que as pessoas realmente falam.",
+	},
+	{
+		icon: Heart,
+		title: "Prazer no processo",
+		text: "Uma experiência leve, sem pressão, feita para fazer parte do seu dia.",
+	},
+	{
+		icon: Sparkles,
+		title: "Curiosidade diária",
+		text: "Pequenas descobertas que tornam o mundo mais interessante.",
+	},
+];
 
 function AboutScreen() {
 	return (
-		<div className="min-h-screen overflow-hidden bg-[#050507] text-white">
-			<div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(124,92,232,0.18),transparent_34%),linear-gradient(180deg,rgba(5,5,7,0)_0%,#050507_72%)]" />
+		<div className="min-h-screen bg-[#05090a] text-white">
+			<div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_5%_12%,rgba(116,224,189,0.08),transparent_30%),radial-gradient(circle_at_76%_4%,rgba(124,77,255,0.13),transparent_30%)]" />
 			<div className="relative mx-auto flex min-h-screen max-w-[86rem] flex-col px-5 py-6 sm:px-8 lg:px-12">
 				<PublicHeader />
 
-				<main className="grid flex-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,34rem)]">
-					<section>
-						<p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#ffd782]">
-							Sobre o LinguaSimp
-						</p>
-						<h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
-							Um jeito mais direto de entender frases reais.
-						</h1>
-						<p className="mt-7 max-w-3xl text-lg leading-relaxed text-slate-400 sm:text-xl">
-							O LinguaSimp quebra cada frase em blocos de sentido para você
-							entender o idioma como ele aparece de verdade: ouvindo,
-							comparando, marcando o que já sabe e revisando o que ainda está
-							em construção.
-						</p>
-						<div className="mt-9 flex flex-wrap gap-4">
-							<a
-								href="#signup"
-								className="inline-flex h-14 items-center justify-center gap-3 rounded-[1rem] bg-[#7c5ce8] px-7 text-base font-semibold text-white transition hover:bg-[#8b6cf4]"
-							>
-								Começar grátis
-								<ArrowRight className="size-5 stroke-[2.1]" />
-							</a>
-							<a
-								href="#planos"
-								className="inline-flex h-14 items-center justify-center rounded-[1rem] border border-white/12 bg-white/[0.04] px-7 text-base font-semibold text-slate-200 transition hover:bg-white/[0.075]"
-							>
-								Ver planos
-							</a>
+				<main className="flex flex-1 flex-col py-12 sm:py-14">
+					<section className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(25rem,0.95fr)]">
+						<div>
+							<h1 className="max-w-[35rem] text-5xl font-semibold leading-[1.08] text-white sm:text-6xl">
+								Sobre o LinguaSimp
+							</h1>
+							<h2 className="mt-7 max-w-[35rem] text-3xl font-semibold leading-tight text-[#7c4dff] sm:text-4xl">
+								Feito para quem ama idiomas e o que eles revelam sobre o mundo.
+							</h2>
+							<div className="mt-8 grid max-w-[38rem] gap-6 text-base leading-relaxed text-slate-400 sm:text-lg">
+								<p>
+									Acreditamos que aprender um idioma é muito mais do que
+									decorar palavras. É descobrir novas culturas, entender
+									diferentes jeitos de ver a vida e se conectar com pessoas de
+									verdade.
+								</p>
+								<p>
+									O LinguaSimp nasceu desse propósito: criar uma experiência de
+									aprendizado leve, real e prazerosa para quem transforma
+									curiosidade em rotina.
+								</p>
+							</div>
+						</div>
+
+						<div className="overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#171922] shadow-[0_28px_90px_rgba(0,0,0,0.36)]">
+							<img
+								src="/about-hero-student.png"
+								alt="Pessoa estudando idiomas perto da janela"
+								className="aspect-[4/3] w-full object-cover"
+							/>
 						</div>
 					</section>
 
-					<section className="rounded-[1.5rem] border border-white/10 bg-[#171a24]/90 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.34)] sm:p-6">
-						<img
-							src="/landing-background.png"
-							alt="Estudante usando o LinguaSimp"
-							className="aspect-[4/3] w-full rounded-[1rem] object-cover object-right"
-						/>
-						<div className="mt-5 grid gap-3">
-							{[
-								{
-									icon: Blocks,
-									title: "Blocos de sentido",
-									text: "Palavras e expressões aparecem dentro da frase, não isoladas.",
-								},
-								{
-									icon: Headphones,
-									title: "Escuta no contexto",
-									text: "Áudios ajudam a ligar significado, som e memória.",
-								},
-								{
-									icon: Sparkles,
-									title: "Revisão ativa",
-									text: "Cards, escrita, fala e desenho mantêm o estudo prático.",
-								},
-							].map((item) => {
+					<section className="mt-16">
+						<h2 className="text-3xl font-semibold text-white">O que nos move</h2>
+						<div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+							{values.map((item, index) => {
 								const Icon = item.icon;
 
 								return (
 									<div
 										key={item.title}
-										className="flex gap-4 rounded-[1rem] bg-white/[0.045] p-4"
+										className={`pr-8 ${
+											index > 0 ? "lg:border-l lg:border-white/10 lg:pl-10" : ""
+										}`}
 									>
-										<span className="grid size-11 shrink-0 place-items-center rounded-[0.85rem] bg-[#f4b63f] text-[#141015]">
-											<Icon className="size-5 stroke-[2.2]" />
-										</span>
-										<div>
-											<h2 className="text-base font-semibold text-white">
-												{item.title}
-											</h2>
-											<p className="mt-1 text-sm leading-relaxed text-slate-400">
-												{item.text}
-											</p>
-										</div>
+										<Icon className="size-10 text-[#8b6cf4] stroke-[1.8]" />
+										<h3 className="mt-7 text-base font-semibold text-white">
+											{item.title}
+										</h3>
+										<p className="mt-4 text-sm leading-relaxed text-slate-400">
+											{item.text}
+										</p>
 									</div>
 								);
 							})}
 						</div>
 					</section>
+
+					<section className="relative mt-14 overflow-hidden rounded-[1rem] border border-white/10 bg-[#151820]/82 p-7 shadow-[0_24px_80px_rgba(0,0,0,0.3)] sm:p-10">
+						<div className="max-w-[48rem]">
+							<p className="text-6xl font-semibold leading-none text-[#7c4dff]">
+								“
+							</p>
+							<p className="mt-1 text-3xl font-normal leading-snug text-white sm:text-4xl">
+								Não é sobre falar perfeito.
+								<br />
+								É sobre entender mais. E ser entendido.
+								<br />
+								É sobre viver novas perspectivas.
+							</p>
+						</div>
+						<div className="pointer-events-none absolute bottom-8 right-10 hidden text-[#8b6cf4] md:block">
+							<svg
+								viewBox="0 0 280 140"
+								className="h-32 w-72"
+								aria-hidden="true"
+							>
+								<path
+									d="M20 90c50 40 95 21 122 18 27-3 35 29 69 6"
+									fill="none"
+									stroke="currentColor"
+									strokeDasharray="9 11"
+									strokeLinecap="round"
+									strokeWidth="3"
+								/>
+								<circle
+									cx="158"
+									cy="107"
+									r="12"
+									fill="none"
+									stroke="currentColor"
+									strokeDasharray="7 8"
+									strokeWidth="3"
+								/>
+								<Send className="translate-x-[190px] translate-y-[8px] rotate-12" size={76} strokeWidth={1.8} />
+							</svg>
+						</div>
+					</section>
 				</main>
+
+				<footer className="flex flex-col gap-7 pb-6 pt-4 text-slate-500">
+					<div className="flex flex-wrap items-center justify-between gap-6">
+						<a href="#landing" aria-label="LinguaSimp inicio" className="inline-flex">
+							<img
+								src="/linguasimp-logo-current.png"
+								alt="LinguaSimp"
+								className="block w-36 object-contain object-left"
+							/>
+						</a>
+						<nav className="flex flex-wrap items-center justify-center gap-8 text-sm font-medium">
+							<a href="#sobre" className="transition hover:text-white">
+								Sobre
+							</a>
+							<a href="#planos" className="transition hover:text-white">
+								Planos
+							</a>
+							<a href="#signup" className="transition hover:text-white">
+								Começar
+							</a>
+						</nav>
+						<div className="flex items-center gap-5">
+							<Share2 className="size-5" />
+							<Music2 className="size-5" />
+						</div>
+					</div>
+					<p className="text-center text-sm">
+						© 2026 LinguaSimp. Todos os direitos reservados.
+					</p>
+				</footer>
 			</div>
 		</div>
 	);
