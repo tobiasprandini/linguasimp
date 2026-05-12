@@ -2,13 +2,6 @@ import { ArrowRight, Play } from "lucide-react";
 import PublicHeader from "./PublicHeader";
 
 function LandingScreen() {
-	const avatarStyles = [
-		"bg-[#7c5ce8]",
-		"bg-[#2c8b7d]",
-		"bg-[#c58a43]",
-		"bg-[#c66d7a]",
-	];
-
 	return (
 		<div
 			id="landing"
@@ -48,26 +41,6 @@ function LandingScreen() {
 							</a>
 						</div>
 
-						<div className="mt-11 flex flex-wrap items-center justify-center gap-6">
-							<div className="flex -space-x-4">
-								{["A", "M", "R", "L"].map((initial, index) => (
-									<span
-										key={initial}
-										className={`grid size-12 place-items-center rounded-full border-2 border-[#050507] text-base font-semibold text-white ${avatarStyles[index]}`}
-									>
-										{initial}
-									</span>
-								))}
-							</div>
-							<div>
-								<p className="text-xl leading-none text-[#ffd438]">
-									★★★★★
-								</p>
-								<p className="mt-2 text-base font-normal text-slate-400 lg:text-lg">
-									+25 mil alunos já estão aprendendo
-								</p>
-							</div>
-						</div>
 					</section>
 
 				</main>
