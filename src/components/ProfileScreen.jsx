@@ -215,13 +215,13 @@ function ProfileHeaderCard({
 	}
 
 	return (
-		<section className="rounded-[1.5rem] bg-[#171922]/88 p-7 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/5">
+		<section className="rounded-[1.55rem] bg-[#171a22]/92 p-10 shadow-[0_30px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.04]">
 			<form
 				onSubmit={handleSaveProfile}
-				className="grid gap-7 md:grid-cols-[15rem_minmax(0,1fr)_12rem] md:items-center"
+				className="grid gap-8 md:grid-cols-[17rem_minmax(0,1fr)_14rem] md:items-center"
 			>
 				<label className="relative mx-auto block cursor-pointer md:mx-0">
-					<span className="relative flex size-40 items-center justify-center overflow-hidden rounded-full bg-slate-700 text-6xl font-semibold text-white">
+					<span className="relative flex size-52 items-center justify-center overflow-hidden rounded-full bg-slate-700 text-7xl font-semibold text-white">
 						{avatarPreview ? (
 							<img
 								src={avatarPreview}
@@ -232,7 +232,7 @@ function ProfileHeaderCard({
 							displayName.slice(0, 1).toUpperCase()
 						)}
 					</span>
-					<span className="absolute bottom-0 right-2 grid size-14 place-items-center rounded-full bg-[#8b6cf4] text-white shadow-[0_14px_38px_rgba(139,108,244,0.35)]">
+					<span className="absolute bottom-0 right-4 grid size-14 place-items-center rounded-full bg-[#8b6cf4] text-white shadow-[0_14px_38px_rgba(139,108,244,0.35)]">
 						<Camera className="size-6 stroke-[2]" />
 					</span>
 					<input
@@ -252,7 +252,7 @@ function ProfileHeaderCard({
 								className="min-w-0 rounded-[1rem] border border-white/10 bg-black/20 px-4 py-2 text-3xl font-semibold text-white outline-none focus:border-[#8b6cf4]/65"
 							/>
 						) : (
-							<h2 className="text-4xl font-semibold text-white">
+							<h2 className="text-[2.55rem] font-semibold leading-none text-white">
 								{displayName}
 							</h2>
 						)}
@@ -260,7 +260,7 @@ function ProfileHeaderCard({
 							Estudante
 						</span>
 					</div>
-					<div className="mt-7 grid gap-4 text-lg text-slate-400">
+					<div className="mt-8 grid gap-5 text-[1.32rem] text-slate-400">
 						<p className="flex items-center justify-center gap-4 md:justify-start">
 							<CalendarDays className="size-6 text-[#8b6cf4]" />
 							Membro desde {getMemberSince(user)}
@@ -284,7 +284,7 @@ function ProfileHeaderCard({
 						<button
 							type="submit"
 							disabled={isSaving}
-							className="inline-flex h-14 cursor-pointer items-center gap-3 rounded-[0.9rem] bg-[#8b6cf4] px-6 text-base font-semibold text-white transition hover:bg-[#9b7cff] disabled:cursor-not-allowed disabled:opacity-55"
+							className="inline-flex h-15 min-w-48 cursor-pointer items-center justify-center gap-3 rounded-[0.9rem] bg-[#8b6cf4] px-6 text-base font-semibold text-white transition hover:bg-[#9b7cff] disabled:cursor-not-allowed disabled:opacity-55"
 						>
 							<Save className="size-5" />
 							{isSaving ? "Salvando..." : "Salvar"}
@@ -293,7 +293,7 @@ function ProfileHeaderCard({
 						<button
 							type="button"
 							onClick={() => setIsEditing(true)}
-							className="inline-flex h-14 cursor-pointer items-center gap-3 rounded-[0.9rem] bg-white/[0.045] px-6 text-base font-semibold text-white transition hover:bg-white/10"
+							className="inline-flex h-15 min-w-48 cursor-pointer items-center justify-center gap-3 rounded-[0.9rem] bg-white/[0.045] px-6 text-base font-semibold text-white transition hover:bg-white/10"
 						>
 							<Pencil className="size-5" />
 							Editar perfil
@@ -309,10 +309,10 @@ function LanguageCard({ languageId, progress, level }) {
 	const meta = languageMeta[languageId] ?? languageMeta.ja;
 
 	return (
-		<div className="rounded-[1.25rem] bg-[#171922]/88 p-7 shadow-[0_20px_70px_rgba(0,0,0,0.24)] ring-1 ring-white/5">
+		<div className="min-h-[14.25rem] rounded-[1.25rem] bg-[#171a22]/92 p-8 shadow-[0_20px_70px_rgba(0,0,0,0.24)] ring-1 ring-white/[0.04]">
 			<div className="flex items-center gap-4">
 				<Flag languageId={languageId} />
-				<h3 className="text-xl font-semibold text-white">{meta.name}</h3>
+				<h3 className="text-[1.35rem] font-semibold text-white">{meta.name}</h3>
 			</div>
 			<div className="mt-7 flex items-center gap-4">
 				<div className="h-3 flex-1 overflow-hidden rounded-full bg-white/10">
@@ -323,7 +323,7 @@ function LanguageCard({ languageId, progress, level }) {
 				</div>
 				<span className="text-xl font-semibold text-slate-200">{progress}%</span>
 			</div>
-			<p className="mt-7 text-lg text-slate-400">{level}</p>
+			<p className="mt-7 text-[1.2rem] text-slate-400">{level}</p>
 		</div>
 	);
 }
@@ -332,16 +332,16 @@ function StreakCard() {
 	const days = ["S", "T", "Q", "Q", "S", "S", "D"];
 
 	return (
-		<section className="rounded-[1.5rem] bg-[#171922]/88 p-8 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/5">
+		<section className="rounded-[1.55rem] bg-[#171a22]/92 p-9 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.04]">
 			<h2 className="text-2xl font-semibold text-white">Sequência atual</h2>
-			<div className="mt-8 flex items-center gap-7">
+			<div className="mt-8 flex items-center gap-8">
 				<span className="text-6xl">🔥</span>
 				<div>
 					<p className="text-5xl font-semibold text-white">7</p>
 					<p className="text-xl text-slate-300">dias seguidos</p>
 				</div>
 			</div>
-			<div className="mt-9 grid grid-cols-7 gap-3 text-center">
+			<div className="mt-10 grid grid-cols-7 gap-4 text-center">
 				{days.map((day, index) => {
 					const isToday = index === days.length - 1;
 
@@ -379,7 +379,7 @@ function StatsCard({ knownCount, learningCount }) {
 	];
 
 	return (
-		<section className="rounded-[1.5rem] bg-[#171922]/88 p-8 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/5">
+		<section className="rounded-[1.55rem] bg-[#171a22]/92 p-9 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.04]">
 			<div className="flex items-center justify-between gap-4">
 				<h2 className="text-2xl font-semibold text-white">Estatísticas gerais</h2>
 				<a href="#dashboard" className="text-lg font-semibold text-[#a98cff]">
@@ -392,11 +392,11 @@ function StatsCard({ knownCount, learningCount }) {
 
 					return (
 						<div key={item.label} className="flex items-center justify-between gap-5">
-							<div className="flex items-center gap-4 text-lg text-slate-400">
+							<div className="flex items-center gap-4 text-[1.15rem] text-slate-400">
 								<Icon className="size-6 text-[#a98cff]" />
 								<span>{item.label}</span>
 							</div>
-							<span className="text-lg font-semibold text-white">{item.value}</span>
+							<span className="text-[1.15rem] font-semibold text-white">{item.value}</span>
 						</div>
 					);
 				})}
@@ -422,14 +422,14 @@ function AchievementBadge({ icon, title, text, color }) {
 
 function AchievementsCard() {
 	return (
-		<section className="rounded-[1.5rem] bg-[#171922]/88 p-8 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/5">
+		<section className="rounded-[1.55rem] bg-[#171a22]/92 p-10 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.04]">
 			<div className="flex items-center justify-between gap-4">
 				<h2 className="text-2xl font-semibold text-white">Conquistas</h2>
 				<a href="#dashboard" className="text-lg font-semibold text-[#a98cff]">
 					Ver todas
 				</a>
 			</div>
-			<div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+			<div className="mt-9 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
 				<AchievementBadge
 					icon={<span className="text-4xl font-semibold text-[#a98cff]">7</span>}
 					title="Uma semana"
@@ -484,7 +484,7 @@ function SettingsCard({ onResetProgress }) {
 	];
 
 	return (
-		<section className="rounded-[1.5rem] bg-[#171922]/88 p-8 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/5">
+		<section className="rounded-[1.55rem] bg-[#171a22]/92 p-9 shadow-[0_28px_90px_rgba(0,0,0,0.28)] ring-1 ring-white/[0.04]">
 			<h2 className="text-2xl font-semibold text-white">Configurações</h2>
 			<div className="mt-7 grid gap-5">
 				{settings.map((item) => {
@@ -494,7 +494,7 @@ function SettingsCard({ onResetProgress }) {
 						<button
 							key={item.label}
 							type="button"
-							className="flex cursor-pointer items-center justify-between gap-4 text-left text-lg text-slate-400 transition hover:text-white"
+							className="flex cursor-pointer items-center justify-between gap-4 text-left text-[1.15rem] text-slate-400 transition hover:text-white"
 						>
 							<span className="flex items-center gap-4">
 								<Icon className="size-6 text-slate-500" />
@@ -512,7 +512,7 @@ function SettingsCard({ onResetProgress }) {
 				<button
 					type="button"
 					onClick={handleResetProgressClick}
-					className="mt-2 flex cursor-pointer items-center justify-between gap-4 text-left text-lg text-rose-200 transition hover:text-rose-100"
+					className="mt-2 flex cursor-pointer items-center justify-between gap-4 text-left text-[1.15rem] text-rose-200 transition hover:text-rose-100"
 				>
 					<span className="flex items-center gap-4">
 						<RotateCcw className="size-6" />
@@ -541,7 +541,7 @@ function ProfileScreen({
 
 	return (
 		<div className="min-h-screen bg-[#08090d] text-white">
-			<header className="p-4 sm:p-6 lg:p-8">
+			<header className="border-b border-white/[0.03] bg-[#08090d] p-4 sm:p-6 lg:p-8">
 				<AppHeader
 					user={user}
 					activePage="profile"
@@ -551,11 +551,11 @@ function ProfileScreen({
 				/>
 			</header>
 
-			<main className="mx-auto grid max-w-[118rem] gap-8 px-4 pb-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,36rem)] lg:px-8">
+			<main className="mx-auto grid max-w-[120rem] gap-12 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(32rem,40rem)] lg:px-10">
 				<section className="min-w-0">
-					<div className="mb-9">
-						<h1 className="text-5xl font-semibold text-white">Meu perfil</h1>
-						<p className="mt-4 text-2xl text-slate-400">
+					<div className="mb-10">
+						<h1 className="text-[2.85rem] font-semibold leading-none text-white">Meu perfil</h1>
+						<p className="mt-5 text-[1.45rem] text-slate-400">
 							Acompanhe sua jornada e conquistas.
 						</p>
 					</div>
@@ -566,16 +566,16 @@ function ProfileScreen({
 						onUserUpdated={onUserUpdated}
 					/>
 
-					<section className="mt-9">
+					<section className="mt-10">
 						<div className="flex items-center justify-between gap-4">
-							<h2 className="text-2xl font-semibold text-white">
+							<h2 className="text-[1.65rem] font-semibold text-white">
 								Idiomas em estudo
 							</h2>
 							<a href="#dashboard" className="text-lg font-semibold text-[#a98cff]">
 								Ver todos
 							</a>
 						</div>
-						<div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+						<div className="mt-7 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 							<LanguageCard
 								languageId={learningLanguage}
 								progress={focusedMeta.progress}
@@ -583,7 +583,7 @@ function ProfileScreen({
 							/>
 							<LanguageCard languageId="en" progress={80} level="Avançado" />
 							<LanguageCard languageId="es" progress={45} level="Intermediário" />
-							<div className="grid min-h-[15rem] place-items-center rounded-[1.25rem] bg-[#171922]/88 p-7 text-center shadow-[0_20px_70px_rgba(0,0,0,0.24)] ring-1 ring-white/5">
+							<div className="grid min-h-[14.25rem] place-items-center rounded-[1.25rem] bg-[#171a22]/92 p-8 text-center shadow-[0_20px_70px_rgba(0,0,0,0.24)] ring-1 ring-white/[0.04]">
 								<div>
 									<span className="mx-auto grid size-20 place-items-center rounded-full border border-dashed border-slate-500 text-slate-300">
 										<Plus className="size-10" />
@@ -598,12 +598,12 @@ function ProfileScreen({
 						</div>
 					</section>
 
-					<div className="mt-8">
+					<div className="mt-9">
 						<AchievementsCard />
 					</div>
 				</section>
 
-				<aside className="grid content-start gap-6">
+				<aside className="grid content-start gap-6 pt-[3.15rem]">
 					<StreakCard />
 					<StatsCard knownCount={knownCount} learningCount={learningCount} />
 					<SettingsCard onResetProgress={onResetProgress} />
