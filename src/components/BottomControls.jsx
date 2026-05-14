@@ -1,6 +1,32 @@
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Pause, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+function StudyActionButton({ children, icon, label, onClick }) {
+	function handlePointerDown(event) {
+		event.stopPropagation();
+	}
+
+	function handleClick(event) {
+		event.stopPropagation();
+		onClick?.(event);
+	}
+
+	return (
+		<button
+			type="button"
+			onPointerDown={handlePointerDown}
+			onClick={handleClick}
+			className="relative isolate flex h-12 min-w-[9.5rem] cursor-pointer touch-manipulation select-none items-center justify-center gap-3 rounded-[1.3rem] border border-white/10 bg-[#181a20] px-6 text-base font-semibold text-slate-300 outline-none transition-colors duration-150 hover:bg-[#20232a] hover:text-slate-100 focus-visible:border-[#8b6cf4]/70 focus-visible:ring-2 focus-visible:ring-[#8b6cf4]/35 active:bg-[#242731]"
+			aria-label={label}
+		>
+			<span className="pointer-events-none flex shrink-0 items-center justify-center">
+				{icon}
+			</span>
+			<span className="pointer-events-none whitespace-nowrap">{children}</span>
+		</button>
+	);
+}
+
 function BottomControls({
 	onPrevious,
 	canGoBack = false,
@@ -14,39 +40,39 @@ function BottomControls({
 	return (
 		<div className="flex flex-col items-center">
 			<div className="relative z-40 flex items-center justify-center gap-5">
-				<button
-					type="button"
+				<StudyActionButton
 					onClick={onPlayAudio}
-					className="relative z-10 inline-flex h-10 min-w-[6.5rem] cursor-pointer select-none items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 outline-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 focus-visible:border-[#8b6cf4]/70 focus-visible:ring-2 focus-visible:ring-[#8b6cf4]/30 active:bg-white/[0.08] sm:h-11 sm:min-w-[7rem] sm:text-base [&_*]:pointer-events-none"
-					aria-label={
+					label={
 						isAudioPlaying
 							? "Pausar audio da frase"
 							: "Tocar audio da frase"
 					}
-				>
-					{isAudioPlaying ? (
-						<Pause className="size-4 fill-current" />
-					) : (
-						<Volume2 className="size-4 stroke-[2]" />
-					)}
-					{isAudioPlaying ? "Pausar" : "Ouvir"}
-				</button>
-
-				<button
-					type="button"
-					onClick={onToggleTranslation}
-					className="relative z-10 inline-flex h-10 min-w-[7rem] cursor-pointer select-none items-center justify-center gap-2 rounded-[1.15rem] border border-white/10 bg-white/5 px-4 text-sm font-semibold text-slate-300 outline-none transition-colors duration-150 hover:bg-white/10 hover:text-slate-100 focus-visible:border-[#8b6cf4]/70 focus-visible:ring-2 focus-visible:ring-[#8b6cf4]/30 active:bg-white/[0.08] sm:h-11 sm:min-w-[7.75rem] sm:text-base [&_*]:pointer-events-none"
-					aria-label={
-						isTranslationVisible ? "Ocultar traducao" : "Mostrar traducao"
+					icon={
+						isAudioPlaying ? (
+							<Pause className="size-5 fill-current" />
+						) : (
+							<Volume2 className="size-5 stroke-[2]" />
+						)
 					}
 				>
-					{isTranslationVisible ? (
-						<EyeOff className="size-4 stroke-[2]" />
-					) : (
-						<Eye className="size-4 stroke-[2]" />
-					)}
+					{isAudioPlaying ? "Pausar" : "Ouvir"}
+				</StudyActionButton>
+
+				<StudyActionButton
+					onClick={onToggleTranslation}
+					label={
+						isTranslationVisible ? "Ocultar traducao" : "Mostrar traducao"
+					}
+					icon={
+						isTranslationVisible ? (
+							<EyeOff className="size-5 stroke-[2]" />
+						) : (
+							<Eye className="size-5 stroke-[2]" />
+						)
+					}
+				>
 					{isTranslationVisible ? "Esconder" : "Traduzir"}
-				</button>
+				</StudyActionButton>
 			</div>
 
 				{translationSlot}
