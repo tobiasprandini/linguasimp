@@ -190,10 +190,11 @@ async function buildSentenceExternalId(payload) {
 }
 
 function buildBlockExternalId(payload) {
+	const languageCode = normalizeLanguageCode(payload.language_code ?? "en");
 	const slug = buildSafeSlug(
 		payload.canonical_text || payload.core_meaning || "block",
 	);
-	return `blk_${slug || Date.now()}`;
+	return `blk_${languageCode}_${slug || Date.now()}`;
 }
 
 function buildDuplicateSentenceExternalId(sentence) {
@@ -479,6 +480,7 @@ async function ensureBlocksExistForSentenceBlocks(sentenceExternalId, sentenceBl
 		const fallbackExternalId = buildBlockExternalId({
 			canonical_text: block.surface,
 			core_meaning: block.contextual_gloss,
+			language_code: sentence.language_code,
 		});
 
 		return {
