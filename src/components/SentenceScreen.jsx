@@ -221,7 +221,7 @@ function SentenceScreen({
 							</AnimatePresence>
 						</div>
 
-							<div className="relative z-0">
+							<div className={`relative ${selectedBlock ? "z-0" : "z-30"}`}>
 								<BottomControls
 									onPrevious={onPrevious}
 									canGoBack={canGoBack}

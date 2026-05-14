@@ -13,7 +13,7 @@ function BottomControls({
 }) {
 	return (
 		<div className="flex flex-col items-center">
-			<div className="flex items-center justify-center gap-5">
+			<div className="relative z-40 flex items-center justify-center gap-5">
 				<button
 					type="button"
 					onClick={onPlayAudio}
