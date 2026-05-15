@@ -36,7 +36,7 @@ function Sentence({
 	}
 
 	return (
-		<div className="mx-auto flex w-full max-w-6xl flex-wrap justify-center gap-x-1 gap-y-3 text-center sm:gap-x-1.5 sm:gap-y-4">
+		<div className="mx-auto flex w-full max-w-6xl flex-wrap justify-center gap-x-1.5 gap-y-3 text-center sm:gap-x-2 sm:gap-y-4">
 			{blocks.map((block) => {
 				const isSelected = selectedBlock?.id === block.id;
 
