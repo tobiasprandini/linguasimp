@@ -1,6 +1,7 @@
 import { createElement, useState } from "react";
 import { ArrowRight, Check, Lock, Mail, UserRound } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { apiRequest } from "../lib/apiClient";
 
 const AUTH_REDIRECT_STORAGE_KEY = "linguasimp-auth-redirect";
 
@@ -36,37 +37,33 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 		setMessage("");
 
 		try {
+			const normalizedEmail = email.trim().toLowerCase();
+
 			if (isSignup) {
-				const signupResponse = await supabase.auth.signUp({
-					email,
-					password,
-					options: {
-						data: {
-							name,
-							full_name: name,
-						},
-						emailRedirectTo:
-							typeof window === "undefined"
-								? undefined
-								: window.location.origin,
-					},
+				await apiRequest("/auth/signup", {
+					method: "POST",
+					body: JSON.stringify({
+						email: normalizedEmail,
+						password,
+						name,
+					}),
 				});
 
-				if (signupResponse.error) {
-					throw signupResponse.error;
+				const authResponse = await supabase.auth.signInWithPassword({
+					email: normalizedEmail,
+					password,
+				});
+
+				if (authResponse.error) {
+					throw authResponse.error;
 				}
 
-				if (!signupResponse.data.session) {
-					setMessage("Conta criada. Confira seu email para confirmar o cadastro.");
-					return;
-				}
-
-				onAuthenticated?.(signupResponse.data.user);
+				onAuthenticated?.(authResponse.data.user);
 				return;
 			}
 
 			const authResponse = await supabase.auth.signInWithPassword({
-				email,
+				email: normalizedEmail,
 				password,
 			});
 
@@ -81,10 +78,13 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 
 			setMessage("Entramos na sua conta.");
 		} catch (error) {
+			const errorMessage = error.message ?? "";
 			setMessage(
-				error.message === "Invalid login credentials"
+				errorMessage === "Invalid login credentials"
 					? "Email ou senha inválidos."
-					: error.message,
+					: errorMessage.toLowerCase().includes("email not confirmed")
+						? "Esse email ainda nao esta confirmado. Clique em Criar conta usando o mesmo email e senha para ativar o acesso."
+						: errorMessage,
 			);
 		} finally {
 			setIsSubmitting(false);
