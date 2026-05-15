@@ -15,6 +15,7 @@ import WalletDemoScreen from "./components/WalletDemoScreen";
 import { supabase } from "./lib/supabase";
 import { buildRuntimeSentences } from "./lib/runtime/buildRuntimeSentences.js";
 import { extractContextualTipFromTags } from "./lib/contextualTipTags.js";
+import { withTimeout } from "./lib/withTimeout";
 
 const PRONUNCIATION_HINTS_STORAGE_KEY = "linguasimp-admin-pronunciation-hints";
 const BLOCK_STATUSES_STORAGE_KEY_PREFIX = "linguasimp-block-statuses";
@@ -818,18 +819,32 @@ function App() {
 	useEffect(() => {
 		let isMounted = true;
 
-		supabase.auth.getUser().then(({ data }) => {
-			if (isMounted) {
-				setAuthUser(data.user ?? null);
-				setIsAuthLoading(false);
-				if (data.user) {
-					const redirectTarget = popStoredAuthRedirectTarget(null);
-					if (redirectTarget) {
-						window.location.hash = "dashboard";
+		withTimeout(
+			supabase.auth.getUser(),
+			10000,
+			"Nao foi possivel verificar o login agora.",
+		)
+			.then(({ data }) => {
+				if (isMounted) {
+					setAuthUser(data.user ?? null);
+					if (data.user) {
+						const redirectTarget = popStoredAuthRedirectTarget(null);
+						if (redirectTarget) {
+							window.location.hash = "dashboard";
+						}
 					}
 				}
-			}
-		});
+			})
+			.catch(() => {
+				if (isMounted) {
+					setAuthUser(null);
+				}
+			})
+			.finally(() => {
+				if (isMounted) {
+					setIsAuthLoading(false);
+				}
+			});
 
 		const { data: authListener } = supabase.auth.onAuthStateChange(
 			(_event, session) => {

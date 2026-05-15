@@ -2,6 +2,7 @@ import { createElement, useState } from "react";
 import { ArrowRight, Check, Lock, Mail, UserRound } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { apiRequest } from "../lib/apiClient";
+import { withTimeout } from "../lib/withTimeout";
 
 const AUTH_REDIRECT_STORAGE_KEY = "linguasimp-auth-redirect";
 
@@ -39,20 +40,33 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 		try {
 			const normalizedEmail = email.trim().toLowerCase();
 
+			if (!normalizedEmail || !password) {
+				setMessage("Preencha email e senha para entrar.");
+				return;
+			}
+
 			if (isSignup) {
-				await apiRequest("/auth/signup", {
-					method: "POST",
-					body: JSON.stringify({
+				await withTimeout(
+					apiRequest("/auth/signup", {
+						method: "POST",
+						body: JSON.stringify({
+							email: normalizedEmail,
+							password,
+							name,
+						}),
+					}),
+					15000,
+					"O cadastro demorou para responder. Confira a conexao e tente novamente.",
+				);
+
+				const authResponse = await withTimeout(
+					supabase.auth.signInWithPassword({
 						email: normalizedEmail,
 						password,
-						name,
 					}),
-				});
-
-				const authResponse = await supabase.auth.signInWithPassword({
-					email: normalizedEmail,
-					password,
-				});
+					15000,
+					"O login demorou para responder. Confira a conexao e tente novamente.",
+				);
 
 				if (authResponse.error) {
 					throw authResponse.error;
@@ -62,10 +76,14 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 				return;
 			}
 
-			const authResponse = await supabase.auth.signInWithPassword({
-				email: normalizedEmail,
-				password,
-			});
+			const authResponse = await withTimeout(
+				supabase.auth.signInWithPassword({
+					email: normalizedEmail,
+					password,
+				}),
+				15000,
+				"O login demorou para responder. Confira a conexao e tente novamente.",
+			);
 
 			if (authResponse.error) {
 				throw authResponse.error;
