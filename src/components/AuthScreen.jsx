@@ -6,6 +6,18 @@ import { withTimeout } from "../lib/withTimeout";
 
 const AUTH_REDIRECT_STORAGE_KEY = "linguasimp-auth-redirect";
 
+function getOAuthRedirectUrl() {
+	if (typeof window === "undefined") {
+		return undefined;
+	}
+
+	if (window.location.hostname === "127.0.0.1") {
+		return `${window.location.protocol}//localhost:${window.location.port}`;
+	}
+
+	return window.location.origin;
+}
+
 function AuthInput({ icon: Icon, label, type = "text", value, onChange }) {
 	return (
 		<label className="block">
@@ -118,12 +130,10 @@ function AuthScreen({ mode = "login", onAuthenticated, redirectHash = "profile" 
 				window.localStorage.setItem(AUTH_REDIRECT_STORAGE_KEY, "dashboard");
 			}
 
-			const redirectTo =
-				typeof window === "undefined" ? undefined : window.location.origin;
 			const { error } = await supabase.auth.signInWithOAuth({
 				provider: "google",
 				options: {
-					redirectTo,
+					redirectTo: getOAuthRedirectUrl(),
 				},
 			});
 
