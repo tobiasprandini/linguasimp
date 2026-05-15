@@ -1,6 +1,10 @@
 import "dotenv/config";
 import { supabase } from "../lib/supabase.js";
-import { elevenlabs, resolveElevenLabsVoiceId } from "../lib/elevenlabs.js";
+import {
+	elevenlabs,
+	resolveElevenLabsLanguageCode,
+	resolveElevenLabsVoiceId,
+} from "../lib/elevenlabs.js";
 import { streamToBuffer } from "../lib/audio.js";
 
 async function generatePendingAudio() {
@@ -29,6 +33,9 @@ async function generatePendingAudio() {
 					languageCode: sentence.language_code,
 					audioKind: "sentence",
 				});
+				const languageCode = resolveElevenLabsLanguageCode(
+					sentence.language_code,
+				);
 
 				const audioStream = await elevenlabs.textToSpeech.convert(
 					voiceId,
@@ -37,7 +44,7 @@ async function generatePendingAudio() {
 						modelId:
 							process.env.ELEVENLABS_MODEL_ID ||
 							"eleven_multilingual_v2",
-						languageCode: sentence.language_code,
+						...(languageCode ? { languageCode } : {}),
 						outputFormat: "mp3_44100_128",
 						...(sentence.speech_speed
 							? {

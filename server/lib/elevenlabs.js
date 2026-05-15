@@ -71,3 +71,15 @@ export function resolveElevenLabsVoiceId({ languageCode, audioKind } = {}) {
 
 	throw new Error("Nenhum ElevenLabs voice id configurado.");
 }
+
+export function resolveElevenLabsLanguageCode(languageCode) {
+	const normalizedLanguageCode = String(languageCode ?? "")
+		.trim()
+		.toLowerCase();
+
+	if (normalizedLanguageCode === "no") {
+		return undefined;
+	}
+
+	return normalizedLanguageCode || undefined;
+}

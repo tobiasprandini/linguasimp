@@ -3,7 +3,11 @@ import express from "express";
 import cors from "cors";
 import { supabase } from "./lib/supabase.js";
 import { streamToBuffer } from "./lib/audio.js";
-import { elevenlabs, resolveElevenLabsVoiceId } from "./lib/elevenlabs.js";
+import {
+	elevenlabs,
+	resolveElevenLabsLanguageCode,
+	resolveElevenLabsVoiceId,
+} from "./lib/elevenlabs.js";
 
 const app = express();
 const DEFAULT_LESSON_ID = "lesson_1";
@@ -212,13 +216,14 @@ function omitDatabaseId(record) {
 
 async function generateAudioBuffer(text, { languageCode, audioKind, speechSpeed } = {}) {
 	const voiceId = resolveElevenLabsVoiceId({ languageCode, audioKind });
+	const elevenLabsLanguageCode = resolveElevenLabsLanguageCode(languageCode);
 	const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
 	const normalizedSpeechSpeed =
 		speechSpeed === undefined ? null : normalizeSentenceSpeechSpeed(speechSpeed);
 	const audioStream = await elevenlabs.textToSpeech.convert(voiceId, {
 		text,
 		modelId,
-		languageCode,
+		...(elevenLabsLanguageCode ? { languageCode: elevenLabsLanguageCode } : {}),
 		outputFormat: "mp3_44100_128",
 		...(normalizedSpeechSpeed
 			? {
